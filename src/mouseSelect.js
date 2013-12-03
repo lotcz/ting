@@ -8,7 +8,7 @@ function mouseSelect()
 	
 	this.animationFrame = function (camera, scene) {
 
-		if (true) {
+		if (false) {
 			var vector = new THREE.Vector3( this.x, this.y, 1 );
 			this.projector.unprojectVector( vector, camera );
 			var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );

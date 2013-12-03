@@ -23,9 +23,16 @@ function tingAirplane( geometry, materials ) {
 	this.lights.push(new tingLight(-1300,5400, -13800, 0xF0F0FF, [1,0.2,0.2,0.2], this.wrapper));
 	this.lights.push(new tingLight(-1200,800, 0, 0xF0F0FF, [0.2,0.2,1,0.2], this.wrapper));
 	
+	/*
+	this.sound = new tingSound( [ 'sound/a2.wav' ], 100000, 0.2 );
+	this.sound.audio.loop = true;
+	this.sound.position = this.wrapper.position;
+	*/
+	
 	this.addToScene = function( scene ) {
 		this.wrapper.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.wrapper );
+		//this.sound.play();
 	}
 	
 	this.animationFrame = function( delta ) {

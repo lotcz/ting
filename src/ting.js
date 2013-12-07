@@ -1,7 +1,7 @@
 /* GLOBALS */
 var WIDTH, HEIGHT, ASPECT, CITY_POSITION, DELTA;
 var skybox, ambient_light, mountains;
-var renderer, scene, camera, controls, audio, clock, hud, loader;
+var renderer, scene, camera, controls, audio, clock, hud, loader, stats;
 
 var animated = [];
 //var sounds = [];
@@ -14,6 +14,8 @@ var colors = {
 };
 
 function animationFrame() {
+	stats.begin();
+	
 	requestAnimationFrame(animationFrame);
 	
 	DELTA = clock.getDelta();
@@ -34,6 +36,8 @@ function animationFrame() {
 	skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 		
 	renderer.render( scene, camera );
+	
+	stats.end();
 };
 	
 /*	
@@ -110,7 +114,15 @@ $( function () {
 	
 	renderScene();
 	
-			 
+	/* stats */
+	stats = new Stats();
+	stats.setMode(0); // 0: fps, 1: ms
+
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
+	document.body.appendChild( stats.domElement );
+				
 });
 
 

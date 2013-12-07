@@ -15,10 +15,10 @@ function renderScene() {
 	
 	/* AUDIO */	
 	
-	/*
+	
 	loader.add('Audio tracks');
 	audio = new tingAudio( function () { loader.notify('Audio tracks'); } );
-	*/
+	
 	
 	/* SKYBOX */
 	var imagePrefix = "images/grim-";

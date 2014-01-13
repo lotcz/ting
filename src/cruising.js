@@ -9,6 +9,12 @@ function tingCruising( mesh ) {
 		this.targets.push( new cruisingTarget( x, y, z, speed, iterations ) );	
 	}
 	
+	this.reset = function() {
+		this.next_position = 0;
+		this.distance_last_check = 101;
+		this.distance = -1;
+	}
+		
 	this.animationFrame = function( delta ) {
 		
 		/* check for new target */
@@ -18,7 +24,7 @@ function tingCruising( mesh ) {
 			
 			if (this.distance > this.last_distance) {
 				this.next_position++;
-				if (this.next_position == this.targets.length) {
+				if (this.next_position >= this.targets.length) {
 					this.next_position = 0;
 				}
 				this.distance = this.mesh.position.distanceTo(this.targets[this.next_position].vector);

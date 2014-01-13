@@ -10,7 +10,7 @@ function tingLight(x, y, z, light_color, blink_delays, scene) {
 	this.light_color = light_color;
 	
 	this.addToScene = function(scene) {
-		this.light = new THREE.PointLight(this.light_color, 2, 5000);
+		this.light = new THREE.PointLight(this.light_color, 2, 100);
 		this.ball = new THREE.Mesh( sphere_geometry, new THREE.MeshBasicMaterial( { color: this.light_color } ) );
 		this.ball.position = this.position;
 		this.light.position = this.position;

@@ -115,7 +115,7 @@ function tingMountains() {
 
 		//mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color:0x010105} ) );
 		
-		mesh.position.set(-20000,0,20000);
+		mesh.position.set(0,-20000,0);
 		scene.add( mesh );
 	}
 	

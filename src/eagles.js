@@ -1,15 +1,14 @@
 function tingEagles(geometry, materials) {
 	this.eagles = new THREE.Object3D();
+	this.position = this.eagles.position;
 	this.material = new THREE.MeshLambertMaterial( materials );
 	this.material.morphTargets = true;
 	this.material.vertexColors = THREE.FaceColors;
-	this.speed = 5000;
+	this.speed = 40;
 
 	this.cruising = new tingCruising(this.eagles);
-	this.cruising.addTarget(36021,48252, 31266, this.speed);
-	this.cruising.addTarget(-59241,117598, 201867, this.speed);
-	this.cruising.addTarget(87259,101111, 134359, this.speed);
-	this.cruising.addTarget(-73655,94208, 126225, this.speed);
+	this.cruising.addTarget(0,0, -300, this.speed);
+	this.cruising.addTarget(10000, 100, 600, this.speed);
 
 	var eagle = new THREE.MorphAnimMesh( geometry, this.material );	
 	eagle.duration = 2;
@@ -27,7 +26,7 @@ function tingEagles(geometry, materials) {
 	eagle.time = 1.5;
 	this.eagles.add(eagle);
 		
-	this.eagles.scale.set(10,10,10);
+	this.eagles.scale.set(0.2,0.2,0.2);
 	
 	this.addToScene = function (scene) {
 		this.eagles.position.copy(this.cruising.targets[0].vector);

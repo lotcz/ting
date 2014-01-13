@@ -1,154 +1,47 @@
-var tingClouds = function ( x, y, z, length, width, height ) {
+function tingClouds (x, y, z, AMOUNTX, AMOUNTY, SEPARATION ) {
 
-	var geometry = new THREE.Geometry();
-
-	var texture = THREE.ImageUtils.loadTexture( 'images/cloud256.png');
-
-	var fog = new THREE.Fog( 0x5299d1, - 100, 3000 );
-
-	var material = new THREE.ShaderMaterial( {
-		uniforms: {
-
-			"map": { type: "t", value:2, texture: texture },
-			"fogColor" : { type: "c", value: fog.color },
-			"fogNear" : { type: "f", value: fog.near },
-			"fogFar" : { type: "f", value: fog.far }
-
-		},
-		vertexShader: [
-
-			"varying vec2 vUv;",
-
-			"void main() {",
-
-				"vUv = uv;",
-				"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
-			"}"
-
-		].join("\n"),
-
-		fragmentShader: [
-
-			"uniform sampler2D map;",
-
-			"uniform vec3 fogColor;",
-			"uniform float fogNear;",
-			"uniform float fogFar;",
-
-			"varying vec2 vUv;",
-
-			"void main() {",
-
-				"float depth = gl_FragCoord.z / gl_FragCoord.w;",
-				"float fogFactor = smoothstep( fogNear, fogFar, depth );",
-
-				"gl_FragColor = texture2D( map, vUv );",
-				"gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );",
-				"gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
-
-			"}"
-
-		].join("\n"),
-
-		depthTest: false
-
-	} );
-
-	var plane_mat =  new THREE.Plane( 64, 64 );
-	plane_mat.morphTargets = [];
-	var plane = new THREE.Mesh( plane_mat );
+	this.AMOUNTX = AMOUNTX;
+	this.AMOUNTY = AMOUNTY;
+	this.SEPARATION = SEPARATION;
+	this.x = x;
+	this.y = y;
+	this.z = z;
+	this.particles = new Array();
+	this.count = 0;
+	
+	this.addToScene = function (scene) {		
+		var map1 = THREE.ImageUtils.loadTexture( "images/cloud256.png" );		
+		var material = new THREE.SpriteMaterial( { map: map1, opacity: 1, useScreenCoordinates: false } );
 		
-	for ( var i = 0; i < 4000; i++ ) {
+		var particle;
+		var i = 0;
 
-		plane.position.x = Math.random() * 1000 - 500;
-		plane.position.y = - Math.random() * Math.random() * 200 - 15;
+		for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
 
-		plane.position.z = i;
-		plane.rotation.z = Math.random() * Math.PI;
-		plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
-
-		GeometryUtils.merge( geometry, plane );
-
+			for ( var iy = 0; iy < this.AMOUNTY; iy ++ ) {
+				particle = this.particles[ i ++ ] = new THREE.Sprite( material );				
+				particle.scale.x = 100 + Math.random()*100;
+				particle.scale.y = 100 + Math.random()*100;
+				particle.moveY = this.y;
+				particle.position.x = this.x + ((Math.random()*100) - 50) + ( ix * this.SEPARATION );
+				particle.position.z = this.z + ((Math.random()*100) - 50) + ( iy * this.SEPARATION );
+				scene.add( particle );				
+			}
+		}
 	}
 
-	this.mesh = new THREE.Mesh( geometry, material );
-	this.mesh2 = new THREE.Mesh( geometry, material );
+	this.animationFrame = function () {
+		var i = 0;
 
-	texture.magFilter = THREE.LinearMipMapLinearFilter;
-	texture.minFilter = THREE.LinearMipMapLinearFilter;
+		for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
 
-	renderTargetClouds = new THREE.WebGLRenderTarget( 512, 512, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter } );
-	renderTargetClouds.depthBuffer = false;
-	renderTargetClouds.stencilBuffer = false;
-	
-	window.renderTargetClouds = renderTargetClouds;
+			for ( var iy = 0; iy < this.AMOUNTY; iy ++ ) {
+				particle = this.particles[ i++ ];
+				particle.position.y = particle.moveY + ( Math.sin( ( ix + this.count ) * 0.3 ) * 15 ) + ( Math.sin( ( iy + this.count ) * 0.5 ) * 15 );
+			}
 
-	var postUniforms = {
-	"tClouds": { type: "t", value: 0, texture: renderTargetClouds },
-	"tFlamingos": { type: "t", value: 1, texture: renderTargetFlamingos },
-	"width": { type: "f", value: window.innerWidth },
-	"height": { type: "f", value: window.innerHeight },
-	"fogColor" : {type: "c", value: fog.color}
-	};
+		}
 
-	this.postMaterial = new THREE.MeshShaderMaterial( {
-        uniforms: postUniforms,
-        vertexShader: [
-          "varying vec2 vUv;",
-
-          "void main() {",
-              "vUv = vec2( uv.x, 1.0 - uv.y );",
-              "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-          "}"
-
-        ].join("\n"),
-
-        fragmentShader: [
-          "uniform sampler2D tClouds;",
-          "uniform sampler2D tFlamingos;",
-          "uniform vec3 fogColor;",
-          "uniform float width;",
-          "uniform float height;",
-          "varying vec2 vUv;",
-
-          "void main() {",
-              "vec4 flamingos = vec4(0.);",
-              "if (vUv.y > 0.5) {",
-                  "flamingos += texture2D( tFlamingos, vUv );",
-                  "flamingos += texture2D( tFlamingos, vUv+vec2(1./width,0.) );",
-                  "flamingos += texture2D( tFlamingos, vUv+vec2(.0,1./height) );",
-                  "flamingos += texture2D( tFlamingos, vUv+vec2(1./width,1./height) );",
-                  "flamingos *= 1./4.;",
-                  "flamingos.rgb = mix(flamingos.rgb, vec3(fogColor), 0.15*flamingos.a);",
-              "}",
-
-              "vec4 clouds = texture2D( tClouds, vUv );",
-              "gl_FragColor = mix(flamingos, clouds, clouds.a);",
-              "gl_FragColor.rgb *= 1./gl_FragColor.a;",
-
-          "}"
-
-        ].join("\n")
-      } );
-	
-
-	this.addToScene = function(scene) {
-
-		scene.addObject( new THREE.Mesh( new THREE.Plane( window.innerWidth, window.innerHeight ), this.postMaterial ) );
-
-		mesh.position.z = - 4000;
-		scene.addObject( mesh );
-
-		mesh2.position.z = 0;
-		scene.addObject( mesh2 );
-		
+		this.count += 0.05;
 	}
-
-
-	this.animationFrame = function (delta) {
-
-		
-	};
-
 }

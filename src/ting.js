@@ -1,10 +1,11 @@
 /* GLOBALS */
 var WIDTH, HEIGHT, ASPECT, CITY_POSITION, DELTA;
-var skybox, ambient_light, mountains;
+var skybox, ambient_light, mountains, navigation, airplane, eagles;
 var renderer, scene, camera, controls, audio, clock, hud, loader, stats;
 
 var animated = [];
-//var sounds = [];
+
+var current_n = 1;
 
 var colors = {
 	black:new THREE.Color(0x000000), 
@@ -14,30 +15,24 @@ var colors = {
 };
 
 function animationFrame() {
-	stats.begin();
 	
-	requestAnimationFrame(animationFrame);
-	
-	DELTA = clock.getDelta();
-	
-	controls.update(DELTA);
-	
+	if (stats) stats.begin();	
+	requestAnimationFrame(animationFrame);	
+	DELTA = clock.getDelta();	
+	controls.update(DELTA);	
 	for(animatedID in animated) { 
 		animated[animatedID].animationFrame(DELTA);
-	}
-	
-	/*
-	for(soundID in sounds) { 
-		sounds[soundID].animationFrame( camera );
-	}
-	*/
-	//mouse.animationFrame(camera, scene);
+	}	
+
+	switch (current_n) {
+		case 1 :
+			navigation.animationFrame();
+			break;
+	}	
 	
 	skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
-		
-	renderer.render( scene, camera );
-	
-	stats.end();
+	renderer.render( scene, camera );	
+	if (stats) stats.end();
 };
 	
 /*	
@@ -50,6 +45,26 @@ function OnDocumentMouseDown( event ) {
 	mouse.mouseDown();
 }
 */
+
+function resetTing(n) {
+	current_n = n;
+	switch ( n ) {
+		case 0:
+			controls.constrainVertical = false;			
+		case 1:
+		controls.constrainVertical = true;
+		controls.verticalMin = 1.0;
+		controls.verticalMax = 1.9;
+		camera.position.set(0,0,0);
+		camera.lookAt(new THREE.Vector3(1, 0, 0));
+		airplane.cruising.reset();
+		airplane.position.set(0, 0, 0);	
+		eagles.cruising.reset();
+		eagles.position.set(0, 0, -300);	
+		navigation = new tingNavigation(camera, airplane);
+		break;
+	}
+}
 
 function OnWindowResize() {
 	WIDTH = window.innerWidth;
@@ -64,11 +79,11 @@ function OnWindowResize() {
 function OnKeyPress(e) {
 	var key = e.keyCode ? e.keyCode : e.charCode;
 	
-	//console.log("key:" + key);
+	console.log("key:" + key);
 	
 	switch ( key ) {
 
-		case 102 /* F */: controls.freeze=!controls.freeze;break;
+		case 102 /* F */: resetTing(0);break;
 		case 107 /* K */: ambient_light.visible = !ambient_light.visible;break;
 		case 108 /* L */: console.log("x:" + camera.position.x + " y:" + camera.position.y + " z:" + camera.position.z + " rotation:" + camera.rotation.x + "," + camera.rotation.y + "," + camera.rotation.z);break; 
 		case 109 /* M */: 
@@ -76,10 +91,12 @@ function OnKeyPress(e) {
 			$("#txt1").val(array.toString());
 			break;
 		case 111 /* O */: 
-			for(soundID in sounds) { 
-				sounds[soundID].pause();
-			}
+			//audio.source1.pause();
+			audio.source1.stop();
 			break;
+		case 114 /* R */: 
+			resetTing(1);
+		break;
 	}
 	
 	return false;
@@ -89,6 +106,7 @@ function onLoaderChange( ready ) {
 
 	if (ready) {
 		clock = new THREE.Clock(true);
+		resetTing(1);
 		animationFrame();
 		hud.animate({opacity:0}, 3000,  function() { hud.hide(); } );
 	}

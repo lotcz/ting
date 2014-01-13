@@ -1,33 +1,39 @@
-function tingAirplane( geometry, materials ) {
+function tingAirplane(x, y, z, geometry, materials ) {
 	
 	this.wrapper = new THREE.Object3D();
-	this.speed = 4000;
+	this.wrapper.scale.set( 0.01, 0.01, 0.01 );
+	this.position = this.wrapper.position;
+	this.rotation = this.wrapper.rotation;
+	this.speed = 80;
 	this.cruising = new tingCruising(this.wrapper);
-	this.cruising.addTarget(-59241,117598, 201867, this.speed);
-	this.cruising.addTarget(87259,101111, 134359, this.speed);
+	this.cruising.addTarget(0,50,0, this.speed);
+	this.cruising.addTarget(1000,20,0, this.speed);
+	this.cruising.addTarget(4000,-20,0, this.speed);
+	this.cruising.addTarget(4500,-30,0, this.speed);
+	this.cruising.addTarget(5500,-40,0, this.speed);
+	this.cruising.addTarget(6000,-30,0, this.speed);
+	this.cruising.addTarget(7000,-20,0, this.speed);
+	this.cruising.addTarget(8500,0,0, this.speed);
+	this.cruising.addTarget(9000,40,0, this.speed);
+	this.cruising.addTarget(10000,30,0, this.speed);
 	
 	var material = new THREE.MeshLambertMaterial( materials );
 	this.airplane = new THREE.Mesh( geometry, material );	
-	this.scale = 10;
-	this.airplane.scale.set( this.scale, this.scale, this.scale );
+	this.airplane.scale.set( 10, 10, 10 );
 	this.airplane.position.set( 0, 0, 0 );
 	this.airplane.rotation.x = Math.PI / 2;
 	this.airplane.rotation.z = Math.PI;
 	this.wrapper.add( this.airplane );
 	
 	/* ligths */
-	this.lights = new Array();
+	this.lights = new Array();	
 	this.lights.push(new tingLight(7500, 1750, -7000, 0xFF0000, [1], this.wrapper));
 	this.lights.push(new tingLight(-8700,1750, -7000, 0x00FF00, [0,1,1,0], this.wrapper));
+	/*
 	this.lights.push(new tingLight(-1100,5400, -13800, 0xF0F0FF, [1,0.2,0.2,0.2], this.wrapper));
 	this.lights.push(new tingLight(-1300,5400, -13800, 0xF0F0FF, [1,0.2,0.2,0.2], this.wrapper));
-	this.lights.push(new tingLight(-1200,800, 0, 0xF0F0FF, [0.2,0.2,1,0.2], this.wrapper));
-	
-	/*
-	this.sound = new tingSound( [ 'sound/a2.wav' ], 100000, 0.2 );
-	this.sound.audio.loop = true;
-	this.sound.position = this.wrapper.position;
 	*/
+	this.lights.push(new tingLight(-1200,800, 0, 0xF0F0FF, [0.2,0.2,1,0.2], this.wrapper));
 	
 	this.addToScene = function( scene ) {
 		this.wrapper.position.copy(this.cruising.targets[0].vector);

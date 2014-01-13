@@ -1,6 +1,7 @@
 function tingCity( position ) {
 
 	this.wrapper = new THREE.Object3D();
+	this.wrapper.scale.set(0.2,0.2,0.2);
 	this.wrapper.position = position;
 	this.lights = new Array();
 	

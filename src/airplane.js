@@ -18,12 +18,13 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.cruising.addTarget(10000,30,0, this.speed);
 	
 	var material = new THREE.MeshLambertMaterial( materials );
-	this.airplane = new THREE.Mesh( geometry, material );	
-	this.airplane.scale.set( 10, 10, 10 );
-	this.airplane.position.set( 0, 0, 0 );
-	this.airplane.rotation.x = Math.PI / 2;
-	this.airplane.rotation.z = Math.PI;
-	this.wrapper.add( this.airplane );
+	this.mesh = new THREE.Mesh( geometry, material );	
+	this.mesh.airplane = this;	
+	this.mesh.scale.set( 10, 10, 10 );
+	this.mesh.position.set( 0, 0, 0 );
+	this.mesh.rotation.x = Math.PI / 2;
+	this.mesh.rotation.z = Math.PI;
+	this.wrapper.add( this.mesh );
 	
 	/* ligths */
 	this.lights = new Array();	
@@ -38,6 +39,7 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.addToScene = function( scene ) {
 		this.wrapper.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.wrapper );
+		scene.selectable.push( this.mesh );
 		//this.sound.play();
 	}
 	

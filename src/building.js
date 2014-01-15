@@ -31,8 +31,9 @@ function tingBuilding(x, y, z, width, length, height, windows, scene) {
 		
 		if (this.windows) {
 			for (var i = 0; i < building.geometry.faces.length; i++) {
-				if (Math.random() > this.windows.amount) {
+				if ((Math.random() > this.windows.amount) && (i%2==1)) {
 					building.geometry.faces[i].color = this.windows.color;
+					building.geometry.faces[i-1].color = this.windows.color;
 				} else {
 					building.geometry.faces[i].color = colors.black;
 				} 

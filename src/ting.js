@@ -1,11 +1,10 @@
 /* GLOBALS */
-var WIDTH, HEIGHT, ASPECT, CITY_POSITION, DELTA;
-var skybox, ambient_light, mountains, navigation, airplane, eagles;
+var WIDTH, HEIGHT, ASPECT, DELTA;
+var skybox, mountains, navigation, airplane, eagles, cockpit;
 var renderer, scene, camera, controls, audio, clock, hud, loader, stats;
 
 var animated = [];
-
-var current_n = 1;
+var current_n = 0;
 
 var colors = {
 	black:new THREE.Color(0x000000), 
@@ -36,14 +35,10 @@ function animationFrame() {
 };
 	
 
-function OnDocumentMouseMove(event) {
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-	mouse.animationFrame(camera, scene);
-}
-
 function OnDocumentMouseDown( event ) {
-	mouse.mouseDown();
+	var x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	var y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	mouse.mouseDown( x, y, camera, scene);
 }
 
 function resetTing(n) {
@@ -61,7 +56,7 @@ function resetTing(n) {
 			airplane.cruising.reset();
 			eagles.cruising.reset();
 			navigation = new tingNavigation(camera, airplane);
-			audio.song.play();
+			//audio.song.play();
 		break;
 	}
 }
@@ -69,11 +64,13 @@ function resetTing(n) {
 function OnWindowResize() {
 	WIDTH = window.innerWidth;
 	HEIGHT = window.innerHeight - 5;
-	ASPECT = this.WIDTH / this.HEIGHT;
-	renderer.setSize( this.WIDTH, this.HEIGHT );
-	camera.aspect = this.ASPECT;
+	ASPECT = WIDTH / HEIGHT;
+	renderer.setSize( WIDTH, HEIGHT );
+	camera.aspect = ASPECT;
 	camera.updateProjectionMatrix();	
 	controls.handleResize();
+	cockpit.scale.set(WIDTH,HEIGHT,1);
+	//cockpit.position.set(0, 0, 1);
 }
 
 function OnKeyPress(e) {
@@ -125,7 +122,7 @@ $( function () {
 	window.addEventListener('resize', OnWindowResize, false);
 	document.addEventListener( 'keypress', OnKeyPress, false );
 	document.addEventListener( 'mousedown', OnDocumentMouseDown, false );
-	$container.bind( 'mousemove', OnDocumentMouseMove );
+	//$container.bind( 'mousemove', OnDocumentMouseMove );
 	
 	hud = $('#hud');
 	loader = new tingLoader( hud, onLoaderChange );

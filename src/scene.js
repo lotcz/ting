@@ -3,6 +3,8 @@ function renderScene() {
 	loader.add('Scene initialization');
 
 	scene = new THREE.Scene();
+	scene.selectable = [];
+	
 	camera = new THREE.PerspectiveCamera( 45, 1, 1, 2000000 );
 	scene.add(camera);
 		
@@ -60,7 +62,7 @@ function renderScene() {
 	var jsonAirplaneLoader = new THREE.JSONLoader();
 	jsonAirplaneLoader.load( "models/airplane.js", function ( geometry, materials ) {
 		airplane = new tingAirplane(250,0,0, geometry, materials );
-		airplane.addToScene( scene );
+		airplane.addToScene( scene );		
 		animated.push( airplane );
 		loader.notify('Airplane model');
 	} );
@@ -97,12 +99,16 @@ function renderScene() {
 	var light_finish2 = new tingLight(10000, 0, 600, 0x00FF00, [1], scene)
 	*/
 	
-	/* SWITCHABLE AMBIENT LIGHT */
+	/* COCKPIT */
 	
-	ambient_light = new THREE.AmbientLight(0x404040);	
-	ambient_light.visible = false;
-	scene.add(ambient_light);
-		
+	loader.add('Cockpit');
+	var cockpitimage = THREE.ImageUtils.loadTexture( "images/cockpit.png" );		
+	var cockpitmaterial = new THREE.SpriteMaterial( { map: cockpitimage, opacity: 1, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.topLeft  } );
+	cockpit = new THREE.Sprite( cockpitmaterial );	
+	
+	scene.add( cockpit );
+	loader.notify('Cockpit');
+	
 	OnWindowResize();
 	
 	loader.notify('Scene initialization');

@@ -12,16 +12,19 @@ function tingEagles(geometry, materials) {
 
 	var eagle = new THREE.MorphAnimMesh( geometry, this.material );	
 	eagle.duration = 2;
+	eagle.eagle = true;
 	this.eagles.add(eagle);
 	
 	eagle = new THREE.MorphAnimMesh( geometry, this.material );	
 	eagle.position.set(200,-10,-500);
+	eagle.eagle = true;
 	eagle.duration = 2;
 	eagle.time = 0.5;
 	this.eagles.add(eagle);
 		
 	eagle = new THREE.MorphAnimMesh( geometry, this.material );	
 	eagle.position.set(-200,10,-600);
+	eagle.eagle = true;
 	eagle.duration = 2;
 	eagle.time = 1.5;
 	this.eagles.add(eagle);
@@ -31,6 +34,7 @@ function tingEagles(geometry, materials) {
 	this.addToScene = function (scene) {
 		this.eagles.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.eagles );
+		scene.selectable = _.union( scene.selectable, this.eagles.children );
 	}
 	
 	this.animationFrame = function(delta) {

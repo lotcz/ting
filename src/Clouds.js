@@ -28,7 +28,8 @@ function tingClouds ( params ) {
 					y: this.y,
 					z: this.z + ((Math.random()*100) - 50) + ( iy * this.SEPARATION ) }
 				);
-				scene.add( cloud.particle );				
+				scene.add( cloud.particle );	
+				scene.selectable.push ( cloud.particle );
 			}
 		}
 	}
@@ -46,6 +47,8 @@ function tingClouds ( params ) {
 							cloud.particle.scale.set( cloud.particle.scale.x + 35, cloud.particle.scale.y + 35, 1);
 							if (cloud.particle.material.opacity <= 0) {
 								this.scene.remove(cloud.particle);
+								//this.scene.selectable = _.without(this.scene.selectable, [cloud.particle]);
+								scene.selectable.splice( scene.selectable.indexOf(cloud.particle), 1 );
 								cloud.active = false;
 							}
 						} else {
@@ -74,7 +77,6 @@ function tingCloud( params ) {
 tingCloud.prototype.tingClick = function() {
 	if (!this.animationStarted) {
 		this.particle.material = this.particle.material.clone();
-		this.animationStarted = true;
-		audio.laser.play();		
+		this.animationStarted = true;		
 	}
 }

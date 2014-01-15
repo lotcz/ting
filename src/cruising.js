@@ -10,6 +10,7 @@ function tingCruising( mesh ) {
 	}
 	
 	this.reset = function() {
+		this.mesh.position.copy(this.targets[0].vector);
 		this.next_position = 0;
 		this.distance_last_check = 101;
 		this.distance = -1;

@@ -20,10 +20,10 @@ function animationFrame() {
 	requestAnimationFrame(animationFrame);	
 	DELTA = clock.getDelta();	
 	controls.update(DELTA);	
-	for(animatedID in animated) { 
-		animated[animatedID].animationFrame(DELTA);
-	}	
-
+	for(var i = 0, max = animated.length; i < max; i++) { 
+		animated[i].animationFrame(DELTA);
+	}
+	
 	switch (current_n) {
 		case 1 :
 			navigation.animationFrame();
@@ -35,33 +35,33 @@ function animationFrame() {
 	if (stats) stats.end();
 };
 	
-/*	
+
 function OnDocumentMouseMove(event) {
 	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	mouse.animationFrame(camera, scene);
 }
 
 function OnDocumentMouseDown( event ) {
 	mouse.mouseDown();
 }
-*/
 
 function resetTing(n) {
 	current_n = n;
 	switch ( n ) {
 		case 0:
-			controls.constrainVertical = false;			
+			controls.constrainVertical = false;		
+			break;
 		case 1:
-		controls.constrainVertical = true;
-		controls.verticalMin = 1.0;
-		controls.verticalMax = 1.9;
-		camera.position.set(0,0,0);
-		camera.lookAt(new THREE.Vector3(1, 0, 0));
-		airplane.cruising.reset();
-		airplane.position.set(0, 0, 0);	
-		eagles.cruising.reset();
-		eagles.position.set(0, 0, -300);	
-		navigation = new tingNavigation(camera, airplane);
+			controls.constrainVertical = true;
+			controls.verticalMin = 1.0;
+			controls.verticalMax = 1.9;
+			camera.position.set(0,0,0);
+			camera.lookAt(new THREE.Vector3(1, 0, 0));
+			airplane.cruising.reset();
+			eagles.cruising.reset();
+			navigation = new tingNavigation(camera, airplane);
+			audio.song.play();
 		break;
 	}
 }
@@ -79,7 +79,7 @@ function OnWindowResize() {
 function OnKeyPress(e) {
 	var key = e.keyCode ? e.keyCode : e.charCode;
 	
-	console.log("key:" + key);
+	//console.log("key:" + key);
 	
 	switch ( key ) {
 
@@ -92,11 +92,11 @@ function OnKeyPress(e) {
 			break;
 		case 111 /* O */: 
 			//audio.source1.pause();
-			audio.source1.stop();
+			audio.song.stop();
 			break;
 		case 114 /* R */: 
 			resetTing(1);
-		break;
+			break;
 	}
 	
 	return false;
@@ -120,13 +120,13 @@ $( function () {
 	var $container = $('#container');	
 	renderer = new THREE.WebGLRenderer();
 	$container.append(renderer.domElement);
-	//mouse = new mouseSelect();
+	mouse = new mouseSelect();
 		
 	window.addEventListener('resize', OnWindowResize, false);
 	document.addEventListener( 'keypress', OnKeyPress, false );
-	//$container.bind( 'mousemove', OnDocumentMouseMove );
-	//$container.bind( 'mousedown', OnDocumentMouseDown );
-		
+	document.addEventListener( 'mousedown', OnDocumentMouseDown, false );
+	$container.bind( 'mousemove', OnDocumentMouseMove );
+	
 	hud = $('#hud');
 	loader = new tingLoader( hud, onLoaderChange );
 	

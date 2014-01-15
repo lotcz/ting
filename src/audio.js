@@ -1,32 +1,45 @@
 function tingAudio( onloaded ) {
 
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
-	context = new AudioContext();
+	this.context = new AudioContext();
+	var _audio = this;
+	
+	this.finishedLoading = function( bufferList )  {
 
-	var finishedLoading = function( bufferList )  {
-
-		this.source1 = context.createBufferSource();
-		//var source2 = context.createBufferSource();
-		this.source1.buffer = bufferList[0];
-		//source2.buffer = bufferList[1];
-
-		this.source1.connect(context.destination);
-		//source2.connect(context.destination);
-		this.source1.start(0);
-		//source2.start(0);
-
+		_audio.song = new tingSound( _audio.context, bufferList[0], 1 );
+				
+		_audio.laser = new tingSound( _audio.context, bufferList[1], 0.05 );
+		
 		onloaded();
 	}
 	
-	bufferLoader = new BufferLoader(
-		context,
+	this.bufferLoader = new BufferLoader(
+		this.context,
 		[
-		  /*'sound/a2.wav',*/
 		  'sound/ktpd.mp3',
+		  'sound/laser.mp3'
 		],
-		finishedLoading
+		this.finishedLoading
 	);
 
-	bufferLoader.load();
+	this.bufferLoader.load();
 }
 
+function tingSound( context, buffer, volume ) {
+	this.context = context;
+	this.buffer = buffer;	
+	this.gainNode = context.createGain();
+	this.gainNode.connect(context.destination);
+	this.gainNode.gain.value = volume;
+}
+
+tingSound.prototype.play = function( ) {
+	this.source = this.context.createBufferSource();		
+	this.source.buffer = this.buffer;
+	this.source.connect(this.gainNode);
+	this.source.start(0);
+}
+
+tingSound.prototype.stop = function() {
+	this.source.noteOff(0);
+}

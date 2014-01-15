@@ -4,12 +4,12 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.wrapper.scale.set( 0.01, 0.01, 0.01 );
 	this.position = this.wrapper.position;
 	this.rotation = this.wrapper.rotation;
-	this.speed = 80;
+	this.speed = 40;
 	this.cruising = new tingCruising(this.wrapper);
 	this.cruising.addTarget(0,50,0, this.speed);
-	this.cruising.addTarget(1000,20,0, this.speed);
-	this.cruising.addTarget(4000,-20,0, this.speed);
-	this.cruising.addTarget(4500,-30,0, this.speed);
+	this.cruising.addTarget(3000,50,0, this.speed);
+	this.cruising.addTarget(4000,-120,0, this.speed);
+	this.cruising.addTarget(4500,-120,0, this.speed);
 	this.cruising.addTarget(5500,-40,0, this.speed);
 	this.cruising.addTarget(6000,-30,0, this.speed);
 	this.cruising.addTarget(7000,-20,0, this.speed);

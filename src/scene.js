@@ -13,7 +13,6 @@ function renderScene() {
 	
 	/* AUDIO */	
 	
-	
 	loader.add('Audio tracks');
 	audio = new tingAudio( function () { loader.notify('Audio tracks'); } );
 	
@@ -52,7 +51,7 @@ function renderScene() {
 	CITY_POSITION2 = new THREE.Vector3( 6000, -1400, 600 );
 	var city2 = new tingCity( CITY_POSITION2 );
 	city2.wrapper.rotation.set(0, -1.55, 0);
-	city2.addToScene( scene );
+	city2.addToScene( scene );	
 	animated.push( city2 );
 	
 	/* AIRPLANE */
@@ -81,9 +80,13 @@ function renderScene() {
 	
 	/* CLOUDS */
 	loader.add('Clouds');
-	var clouds = new tingClouds( 0, -50, -600, 100, 10, 120 );
+	var clouds = new tingClouds( {y:-150, z:-1800, amountX: 30, amountY:30, separation: 120, amplitude:40 } );
 	clouds.addToScene(scene);
 	animated.push(clouds);
+	var clouds2 = new tingClouds( {x:3600, y:-150, z:-1200, amountX: 80, amountY:20, separation: 120, amplitude:40 } );
+	clouds2.addToScene(scene);
+	animated.push(clouds2);
+	//clouds2.pauseAnimation = true;
 	loader.notify('Clouds');
 	
 	/* NAVIGATION LIGHTS */

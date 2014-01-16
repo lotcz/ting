@@ -1,14 +1,14 @@
 function tingClouds ( params ) {
 
 	if (params == null) params = {};
-	this.AMOUNTX = coalesce(params.amountX, 50);
-	this.AMOUNTY = coalesce(params.amountY, 50);
-	this.SEPARATION = coalesce(params.separation, 100);
-	this.x = coalesce(params.x, 0);
-	this.y = coalesce(params.y, 0);
-	this.z = coalesce(params.z, 0);
-	this.speed = coalesce(params.speed, 1);
-	this.amplitude = coalesce(params.amplitude, 150); 
+	this.AMOUNTX = _coalesce(params.amountX, 50);
+	this.AMOUNTY = _coalesce(params.amountY, 50);
+	this.SEPARATION = _coalesce(params.separation, 100);
+	this.x = _coalesce(params.x, 0);
+	this.y = _coalesce(params.y, 0);
+	this.z = _coalesce(params.z, 0);
+	this.speed = _coalesce(params.speed, 1);
+	this.amplitude = _coalesce(params.amplitude, 150); 
 	this.clouds = new Array();
 	this.count = 0;
 	this.pauseAnimation = false;
@@ -47,8 +47,7 @@ function tingClouds ( params ) {
 							cloud.particle.scale.set( cloud.particle.scale.x + 35, cloud.particle.scale.y + 35, 1);
 							if (cloud.particle.material.opacity <= 0) {
 								this.scene.remove(cloud.particle);
-								//this.scene.selectable = _.without(this.scene.selectable, [cloud.particle]);
-								scene.selectable.splice( scene.selectable.indexOf(cloud.particle), 1 );
+								_remove( scene.selectable, cloud.particle );
 								cloud.active = false;
 							}
 						} else {
@@ -66,9 +65,9 @@ function tingCloud( params ) {
 	this.particle = new THREE.Sprite( params.material );				
 	this.particle.scale.x = 100 + Math.random()*100;
 	this.particle.scale.y = 100 + Math.random()*100;
-	this.particle.position.x = coalesce(params.x, 0);
-	this.moveY = coalesce(params.y, 0);
-	this.particle.position.z = coalesce(params.z, 0);
+	this.particle.position.x = _coalesce(params.x, 0);
+	this.moveY = _coalesce(params.y, 0);
+	this.particle.position.z = _coalesce(params.z, 0);
 	this.particle.cloud = this;
 	this.animationStarted = false;
 	this.active = true;

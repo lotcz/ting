@@ -51,12 +51,13 @@ function resetTing(n) {
 			controls.constrainVertical = true;
 			controls.verticalMin = 1.0;
 			controls.verticalMax = 1.9;
+			mouse.enabled = true;
 			camera.position.set(0,0,0);
 			camera.lookAt(new THREE.Vector3(1, 0, 0));
 			airplane.cruising.reset();
 			eagles.cruising.reset();
 			navigation = new tingNavigation(camera, airplane);
-			//audio.song.play();
+			audio.song.play();
 		break;
 	}
 }
@@ -99,15 +100,11 @@ function OnKeyPress(e) {
 	return false;
 }
 
-function onLoaderChange( ready ) {
-
-	if (ready) {
-		clock = new THREE.Clock(true);
-		resetTing(1);
-		animationFrame();
-		hud.animate({opacity:0}, 3000,  function() { hud.hide(); } );
-	}
-	
+function Start() {
+	clock = new THREE.Clock(true);
+	resetTing(1);
+	animationFrame();	
+	hud.animate({opacity:0}, 2000,  function() { loader.element.hide(); } );		
 }
 
 	
@@ -125,7 +122,7 @@ $( function () {
 	//$container.bind( 'mousemove', OnDocumentMouseMove );
 	
 	hud = $('#hud');
-	loader = new tingLoader( hud, onLoaderChange );
+	loader = new tingLoader( hud, Start );
 	
 	renderScene();
 	

@@ -2,7 +2,7 @@ function mouseSelect() {
 	this.projector = new THREE.Projector();
 	this.intersects = null;
 	this.intersected = null;
-	this.enabled = true;
+	this.enabled = false;
 	
 	this.findIntersection = function ( mouseX, mouseY, camera, scene ) {
 	
@@ -33,7 +33,7 @@ function mouseSelect() {
 							n--;
 						}
 					}
-					audio.laser.play();
+					audio.cloud.play();
 				} else if (this.intersected.object.airplane) {
 					audio.airplane.play();
 				} else if (this.intersected.object.eagle) {

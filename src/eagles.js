@@ -29,12 +29,12 @@ function tingEagles(geometry, materials) {
 	eagle.time = 1.5;
 	this.eagles.add(eagle);
 		
-	this.eagles.scale.set(0.2,0.2,0.2);
+	this.eagles.scale.set(0.2, 0.2, 0.2);
 	
 	this.addToScene = function (scene) {
 		this.eagles.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.eagles );
-		scene.selectable = _.union( scene.selectable, this.eagles.children );
+		_append( scene.selectable, this.eagles.children );
 	}
 	
 	this.animationFrame = function(delta) {

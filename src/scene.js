@@ -8,7 +8,7 @@ function renderScene() {
 	camera = new THREE.PerspectiveCamera( 45, 1, 1, 2000000 );
 	scene.add(camera);
 		
-	controls = new THREE.FirstPersonControls( camera, renderer.domElement, new THREE.Vector3(1,0,0) );
+	controls = new THREE.FirstPersonControls( camera, hud.element, new THREE.Vector3(1,0,0) );
 	controls.movementSpeed = 1600;
 	controls.lookSpeed = 0.11;
 	
@@ -112,4 +112,6 @@ function renderScene() {
 	OnWindowResize();
 	
 	loader.notify('Scene initialization');
+	
+	//resetTing(1);
 }

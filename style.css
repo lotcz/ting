@@ -15,9 +15,13 @@ body {
 	height:100%;
 }
 
+#container  canvas {
+	padding:0;
+}
+
 #hud {	
 	background: Black;
-	color:white;
+	color:#d6d6d6;
 	font-weight:bold;
 	display:block;
 	position: absolute;
@@ -27,24 +31,57 @@ body {
 	top: 0;
 }
 
-.progress-bar-wrapper {
-	border-color:white;
-	border-width:1px;
-	border-style:solid;
+/* 
+	LOADER
+*/	
+
+#ting-loader {
+	margin: 25px auto;	
+	text-align:center;
 }
 
-.progress-bar {
-	background-color:white;
+#ting-loader .title-image {
+	margin:auto;
+}
+
+#ting-loader .item-table {
+	margin:25px auto;
+	clear:both;
+}
+
+#ting-loader .item-table  .item-name {
+	width: 450px;
+}
+
+#ting-loader .item-table  .item-state {
+	width: 50px;
+}
+
+#ting-loader .item-table td {
+	padding:5px;
+	margin: 1px;
+	background-color: #0E0E0E;
+}
+
+#ting-loader .progress-bar-wrapper {
+	border-color:#d6d6d6;
+	border-width:1px;
+	border-style:solid;
+	margin:25px;
+}
+
+#ting-loader .progress-bar {
+	background-color:#d6d6d6;
 	height:25px;
 }
 
-.ting-loader {
-	margin: 150px auto;
-	width:500px;
-	height:400px;
-}
-
-
-#container  canvas {
-	padding:0;
+#ting-loader .ok-button {
+	background-color:#0E0E0E;
+	color:#d6d6d6;
+	width: 150px;
+	padding: 25px;
+	margin:50px auto;
+	text-align:center;
+	display:none;
+	cursor:pointer;
 }

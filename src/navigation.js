@@ -4,6 +4,6 @@ function tingNavigation(camera, airplane) {
 	this.airplane = airplane;
 	
 	this.animationFrame = function () {	
-		this.camera.position.copy(this.airplane.position);
+		this.camera.position.x = this.airplane.position.x - 700;
 	}
 }

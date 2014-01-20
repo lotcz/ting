@@ -5,11 +5,12 @@ function tingAudio( onloaded ) {
 	var _audio = this;
 	
 	this.finishedLoading = function( bufferList )  {
-
-		_audio.song = new tingSound( _audio.context, bufferList[0], 1 );				
-		_audio.cloud = new tingSound( _audio.context, bufferList[1], 0.03 );
-		_audio.airplane = new tingSound( _audio.context, bufferList[2], 0.1 );
-		_audio.eagle = new tingSound( _audio.context, bufferList[3], 1 );
+					
+		_audio.cloud = new tingSound( _audio.context, bufferList[0], 0.2 );
+		_audio.airplane = new tingSound( _audio.context, bufferList[1], 0.1 );
+		_audio.eagle = new tingSound( _audio.context, bufferList[2], 1 );
+		
+		_audio.song = new tingSound( _audio.context, bufferList[3], 1 );	
 		
 		onloaded();
 	}
@@ -17,10 +18,10 @@ function tingAudio( onloaded ) {
 	this.bufferLoader = new BufferLoader(
 		this.context,
 		[
-		  'sound/ktpd.mp3',
-		  'sound/cloud.mp3',
+		  'sound/cloud2.mp3',
 		  'sound/airplane.mp3',
 		  'sound/eagle.mp3',
+		  'sound/ktpd.mp3',
 		],
 		this.finishedLoading
 	);

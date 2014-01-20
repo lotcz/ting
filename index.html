@@ -8,30 +8,43 @@
 	
 	</head>
 	
-	<body><div id="container"></div><div id="hud"></div></body>
+	<body>
+		<div id="container"></div>
+		<div id="hud">
+			<div id="ting-loader">
+			<img class="title-image" src="images/title.jpg">
+			<div class="vanish">
+				<table class="item-table"></table>
+				<div class="progress-bar-wrapper"><div class="progress-bar" ></div></div></div>
+				<div class="ok-button">Initializing...</div>
+			</div>
+		</div>
+	</body>
 
 	<!-- LIB -->
 	<script src="src/lib/jquery.min.js"></script>
+	<script src="src/lib/DAT.GUI.min.js"></script>
 	<script src="src/lib/three.js"></script>
 	<script src="src/lib/stats.min.js"></script>
-	<script src="src/lib/ImprovedNoise.js"></script>
+	<!--script src="src/lib/ImprovedNoise.js"></script-->
 
 	<script src="src/tools.js"></script>
 	
 	<!-- TiNG -->
-	<script src="src/FirstPersonControls.js"></script>
+	<script src="src/controls.js"></script>
+	<script src="src/inspector.js"></script>
 	<script src="src/loader.js" language="javascript"></script>
 	<script src="src/mouseSelect.js" language="javascript"></script>
 	<script src="src/buffer-loader.js" language="javascript"></script>
 	<script src="src/audio.js" language="javascript"></script>	
-	<script src="src/building.js" language="javascript"></script>
 	<script src="src/light.js" language="javascript"></script>
+	<script src="src/building.js" language="javascript"></script>
 	<script src="src/city.js" language="javascript"></script>
 	<script src="src/cruising.js" language="javascript"></script>
 	<script src="src/airplane.js" language="javascript"></script>
 	<script src="src/eagles.js" language="javascript"></script>
 	<script src="src/mountains.js" language="javascript"></script>
-	<script src="src/mountainsData.js" language="javascript"></script>
+	<!--script src="src/mountainsData.js" language="javascript"></script-->
 	<script src="src/navigation.js" language="javascript"></script>
 	<script src="src/clouds.js"></script>
 	<script src="src/scene.js" language="javascript"></script>

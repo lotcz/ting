@@ -10,8 +10,8 @@ function tingClouds ( params ) {
 	this.speed = _coalesce(params.speed, 1);
 	this.amplitude = _coalesce(params.amplitude, 150); 
 	this.clouds = new Array();
-	this.count = 0;
-	this.pauseAnimation = false;
+	this.count = 1.5;
+	this.paused = false;
 	
 	this.addToScene = function (scene) {		
 		var map1 = THREE.ImageUtils.loadTexture( "images/cloud256.png" );		
@@ -25,7 +25,7 @@ function tingClouds ( params ) {
 				cloud = this.clouds[ i ++ ] = new tingCloud( {
 					material: material1,
 					x: this.x + ((Math.random()*100) - 50) + ( ix * this.SEPARATION ),
-					y: this.y,
+					y: this.y + ( Math.sin( ( ix + this.count ) * 0.5 ) * this.amplitude ) + ( Math.sin( ( iy + this.count ) * 0.5 ) * this.amplitude ),
 					z: this.z + ((Math.random()*100) - 50) + ( iy * this.SEPARATION ) }
 				);
 				scene.add( cloud.particle );	
@@ -35,7 +35,7 @@ function tingClouds ( params ) {
 	}
 	
 	this.animationFrame = function (delta) {
-		if (!this.pauseAnimation) {
+		if (!this.paused) {
 			var i = 0;
 			this.count += (delta * this.speed);
 			for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
@@ -63,8 +63,8 @@ function tingClouds ( params ) {
 
 function tingCloud( params ) {
 	this.particle = new THREE.Sprite( params.material );				
-	this.particle.scale.x = 100 + Math.random()*100;
-	this.particle.scale.y = 100 + Math.random()*100;
+	this.particle.scale.x = 350 + Math.random()*300;
+	this.particle.scale.y = 350 + Math.random()*300;
 	this.particle.position.x = _coalesce(params.x, 0);
 	this.moveY = _coalesce(params.y, 0);
 	this.particle.position.z = _coalesce(params.z, 0);

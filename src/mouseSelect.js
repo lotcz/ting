@@ -12,8 +12,7 @@ function mouseSelect() {
 		this.intersects = ray.intersectObjects( scene.selectable );
 		
 		if ( this.intersects.length > 0 ) {
-				this.intersected = this.intersects[ 0 ];
-				console.log(this.intersected);
+				this.intersected = this.intersects[ 0 ];				
 				return true;
 		} else {
 			this.intersected = null;
@@ -23,10 +22,18 @@ function mouseSelect() {
 	}	
 	
 	this.mouseDown = function (x, y, camera, scene) {	
-		if (this.enabled) {
+		if (DEBUG_MODE) {
+			if (this.findIntersection(x, y, camera, scene )) {
+				console.log(this.intersected);
+				if (this.intersected.object) {
+					inspector2.reset();
+					inspector2.inspectObject3D(this.intersected.object, 'Selected', 10, true );
+				}				
+			}
+		} else if (this.enabled) {
 			if (this.findIntersection(x, y, camera, scene )) {				
 				if (this.intersected.object.cloud && this.intersected.object.cloud.active) {
-					var n = 5;
+					var n = 10;
 					for(var i = 0, max = this.intersects.length; ((i < max) && (n > 0)); i++) {
 						if (this.intersects[i].object.cloud) {
 							this.intersects[i].object.cloud.tingClick();

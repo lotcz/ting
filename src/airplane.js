@@ -4,19 +4,20 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.wrapper.scale.set( 0.01, 0.01, 0.01 );
 	this.position = this.wrapper.position;
 	this.rotation = this.wrapper.rotation;
-	this.speed = 40;
+	this.speed = 100;
 	this.cruising = new tingCruising(this.wrapper);
-	this.cruising.addTarget(0,50,0, this.speed);
-	this.cruising.addTarget(3000,50,0, this.speed);
-	this.cruising.addTarget(4000,-120,0, this.speed);
-	this.cruising.addTarget(4500,-120,0, this.speed);
+	this.cruising.addTarget(700,50,400, this.speed);
+	this.cruising.addTarget(10000,50,400, this.speed);
+	/*
+	this.cruising.addTarget(4000,-120,400, this.speed);
+	this.cruising.addTarget(4500,-120,400, this.speed);
 	this.cruising.addTarget(5500,-40,0, this.speed);
 	this.cruising.addTarget(6000,-30,0, this.speed);
 	this.cruising.addTarget(7000,-20,0, this.speed);
 	this.cruising.addTarget(8500,0,0, this.speed);
 	this.cruising.addTarget(9000,40,0, this.speed);
 	this.cruising.addTarget(10000,30,0, this.speed);
-	
+	*/
 	var material = new THREE.MeshLambertMaterial( materials );
 	this.mesh = new THREE.Mesh( geometry, material );	
 	this.mesh.airplane = this;	

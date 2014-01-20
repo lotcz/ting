@@ -1,7 +1,7 @@
 function tingCity( position ) {
 
 	this.wrapper = new THREE.Object3D();
-	this.wrapper.scale.set(0.2,0.2,0.2);
+	this.wrapper.scale.set(0.3,0.3,0.3);
 	this.wrapper.position = position;
 	this.lights = new Array();
 	
@@ -21,7 +21,7 @@ function tingCity( position ) {
 			start.add(dir);
 			height = start_height + (Math.random()*4000);
 			start_height += height_modifier;
-			tingBuilding(start.x, height/2, start.z, 200 + (Math.random()*700), 500 + (Math.random()*500), height , {color:wcolor, amount: 0.001 + (Math.random()*0.05) }, this.wrapper);
+			tingBuilding(start.x, height/2, start.z, 200 + (Math.random()*700), 500 + (Math.random()*500), height , {color:wcolor, amount: 0.1 + (Math.random()*0.1) }, this.wrapper);
 		}
 	}
 	

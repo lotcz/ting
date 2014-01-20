@@ -5,13 +5,18 @@ function renderScene() {
 	scene = new THREE.Scene();
 	scene.selectable = [];
 	
-	camera = new THREE.PerspectiveCamera( 45, 1, 1, 2000000 );
+	camera = new THREE.PerspectiveCamera( 35, 1, 1, 2000000 );
 	scene.add(camera);
+	
+	/* CONTROLS */
 		
-	controls = new THREE.FirstPersonControls( camera, hud.element, new THREE.Vector3(1,0,0) );
+	/*controls = new THREE.FirstPersonControls( camera, hud.element, new THREE.Vector3(1,0,0) );
 	controls.movementSpeed = 1600;
 	controls.lookSpeed = 0.11;
-	
+		*/
+		
+	controls = new tingControls({ "camera":camera, element: hud.element });
+	mouse = new mouseSelect();
 	
 	/* AUDIO */	
 	
@@ -32,8 +37,7 @@ function renderScene() {
 			color: 0x909090
 		}));
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-	skybox = new THREE.Mesh( skyGeometry, skyMaterial );
-	skybox.rotation.set(0, 2.4, 0);
+	skybox = new THREE.Mesh( skyGeometry, skyMaterial );	
 	scene.add( skybox );
 	
 	/* MOUNTAINS */
@@ -44,15 +48,15 @@ function renderScene() {
 	
 	/* THE CITY */
 	
-	CITY_POSITION = new THREE.Vector3( 3000, -1400, -600 );
+	CITY_POSITION = new THREE.Vector3( 3000, -2800, 2800 );
 	var city = new tingCity( CITY_POSITION );
 	city.wrapper.rotation.set(0, 1.55, 0);
 	city.addToScene( scene );
 	animated.push( city );
 	
-	CITY_POSITION2 = new THREE.Vector3( 6000, -1400, 600 );
+	CITY_POSITION2 = new THREE.Vector3( 8000, -2800, 2800 );
 	var city2 = new tingCity( CITY_POSITION2 );
-	city2.wrapper.rotation.set(0, -1.55, 0);
+	city2.wrapper.rotation.set(0, 1.55, 0);
 	city2.addToScene( scene );	
 	animated.push( city2 );
 	
@@ -62,6 +66,7 @@ function renderScene() {
 	var jsonAirplaneLoader = new THREE.JSONLoader();
 	jsonAirplaneLoader.load( "models/airplane.js", function ( geometry, materials ) {
 		airplane = new tingAirplane(250,0,0, geometry, materials );
+		navigation = new tingNavigation(camera, airplane);
 		airplane.addToScene( scene );		
 		animated.push( airplane );
 		loader.notify('Airplane model');
@@ -81,14 +86,11 @@ function renderScene() {
 	
 	
 	/* CLOUDS */
+	
 	loader.add('Clouds');
-	var clouds = new tingClouds( {y:-150, z:-1800, amountX: 30, amountY:30, separation: 120, amplitude:40 } );
+	clouds = new tingClouds( {x:-800, y:-220, z:-800, amountX: 30, amountY:30, separation: 250, amplitude:35, speed:1 } );
 	clouds.addToScene(scene);
 	animated.push(clouds);
-	var clouds2 = new tingClouds( {x:3600, y:-150, z:-1200, amountX: 80, amountY:20, separation: 120, amplitude:40 } );
-	clouds2.addToScene(scene);
-	animated.push(clouds2);
-	//clouds2.pauseAnimation = true;
 	loader.notify('Clouds');
 	
 	/* NAVIGATION LIGHTS */
@@ -100,18 +102,17 @@ function renderScene() {
 	*/
 	
 	/* COCKPIT */
-	
+	/*
 	loader.add('Cockpit');
 	var cockpitimage = THREE.ImageUtils.loadTexture( "images/cockpit.png" );		
 	var cockpitmaterial = new THREE.SpriteMaterial( { map: cockpitimage, opacity: 1, useScreenCoordinates: true, alignment: THREE.SpriteAlignment.topLeft  } );
 	cockpit = new THREE.Sprite( cockpitmaterial );	
-	
 	scene.add( cockpit );
 	loader.notify('Cockpit');
+	*/
 	
 	OnWindowResize();
 	
 	loader.notify('Scene initialization');
 	
-	//resetTing(1);
 }

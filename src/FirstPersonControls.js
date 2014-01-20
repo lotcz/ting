@@ -24,7 +24,7 @@ THREE.FirstPersonControls = function ( object, domElement, target ) {
 
 	this.activeLook = true;
 
-	this.heightSpeed = false;
+	this.heightSpeed = true;
 	this.heightCoef = 1.0;
 	this.heightMin = 0.0;
 	this.heightMax = 1.0;

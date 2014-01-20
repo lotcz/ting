@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+        <head>
+                <meta charset="utf-8" />                
+                <title>Multiplayer test</title>
+				
+				<style>
+					.player {
+						display:block;
+						position:absolute;
+						width: 100px;						
+						height: 100px;
+					}
+				</style>
+        </head>
+        
+        <body>			
+			<div id="container"></div>
+		</body>
+
+        <!-- LIB -->
+        <script src="jquery.min.js"></script>
+		
+		<script>
+		
+			var me;
+			var players = [];
+			var container;
+			
+			function player( id, x, y ) {
+				this.id = parseInt(id);
+				this.x = parseInt(x);
+				this.y = parseInt(y);
+								
+				this.element = $("<div class=\"player\" id=\"player-" + this.id + "\">" + this.id + "</div>");
+				container.append( this.element );
+				
+				this.update = function () {
+					this.element.css( {left:this.x, top:this.y} );
+				}
+			}
+			
+			function OnWindowResize() {
+				container.css( { width:window.innerWidth, height: window.innerHeight } );
+			}
+			
+			function OnDocumentMouseDown( event ) {
+				me.x = event.clientX;
+				me.y = event.clientY;
+				me.update();
+				//sendData();
+			}
+			
+			function sendData() {
+				$.get("multi.php?x=" + me.x + "&y=" + me.y + "&id=" + me.id, updatePlayers );
+			}			
+			
+			function findPlayer( id ) {
+				for (var i = 0, max = players.length; i < max; i++ ) {
+					if (id == parseInt(players[i].id)) return players[i];
+				}
+				return false;
+			}
+			
+			function updatePlayers( data ) {
+				me.id = parseInt(data.id);
+				var p;
+				for (var i = 0, max = data.players.length; i < max; i++ ) {
+					p = findPlayer( parseInt(data.players[i].id) );
+					if (!p) {
+						p = new player( data.players[i].id, data.players[i].x, data.players[i].y);
+						players.push ( p );
+					} else {
+						p.x = parseInt(data.players[i].x);
+						p.y = parseInt(data.players[i].y);
+					}
+					p.update();
+				}
+				sendData();
+			}
+			
+			$( function() {
+				
+				container = $("#container");
+
+				me = new player( 0,  100, 100 );
+				me.update();
+				
+				//container.bind( 'mousemove', OnDocumentMouseMove );
+				container.bind( 'mousedown', OnDocumentMouseDown );
+				window.addEventListener('resize', OnWindowResize, false);
+				
+				OnWindowResize();
+				
+				sendData();
+				//setInterval( sendData, 1000);
+				
+			});
+			
+		</script>
+      
+</html>

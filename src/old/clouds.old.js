@@ -15,7 +15,7 @@ function tingClouds ( params ) {
 	this.paused = false;
 	
 	this.addToScene = function (scene) {		
-		var map1 = THREE.ImageUtils.loadTexture( "../images/cloud256.png" );		
+		var map1 = THREE.ImageUtils.loadTexture( "play/cloud256.png" );		
 		var material1 = new THREE.SpriteMaterial( { map: map1, opacity: 1, useScreenCoordinates: false } );
 		var i = 0, cloud;
 		this.scene = scene;

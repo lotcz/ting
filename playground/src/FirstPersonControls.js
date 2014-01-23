@@ -24,7 +24,7 @@ THREE.FirstPersonControls = function ( object, domElement, target ) {
 
 	this.activeLook = true;
 
-	this.heightSpeed = true;
+	this.heightSpeed = false;
 	this.heightCoef = 1.0;
 	this.heightMin = 0.0;
 	this.heightMax = 1.0;
@@ -86,8 +86,8 @@ THREE.FirstPersonControls = function ( object, domElement, target ) {
 
 		}
 
-		//event.preventDefault();
-		//event.stopPropagation();
+		event.preventDefault();
+		event.stopPropagation();
 
 		if ( this.activeLook ) {
 
@@ -268,8 +268,8 @@ THREE.FirstPersonControls = function ( object, domElement, target ) {
 	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), false );
 	this.domElement.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
 	this.domElement.addEventListener( 'mouseup', bind( this, this.onMouseUp ), false );
-	//this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
-	//this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
+	this.domElement.addEventListener( 'keydown', bind( this, this.onKeyDown ), false );
+	this.domElement.addEventListener( 'keyup', bind( this, this.onKeyUp ), false );
 
 	function bind( scope, fn ) {
 

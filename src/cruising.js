@@ -1,83 +1,108 @@
-function tingCruising( mesh ) {
-	this.targets = new Array();
-	this.next_position = 0;
-	this.distance = -1;
-	this.distance_last_check = 101;
-	this.mesh = mesh;
-	
-	this.addTarget = function ( x, y, z, speed, iterations ) {	
-		this.targets.push( new cruisingTarget( x, y, z, speed, iterations ) );	
-	}
-	
-	this.reset = function() {
-		this.mesh.position.copy(this.targets[0].vector);
-		this.next_position = 0;
-		this.distance_last_check = 101;
-		this.distance = -1;
-	}
+function tingCruising( params ) {
+	this.next_target = false;
+	this.step = false;
+	this.distance_left = 0;
+	this.check_interval = 1;
+	this.mesh = params.mesh;
+}
+
+tingCruising.prototype.findNextTarget = function( ) {	
+	this.next_target = this.next_target.neighbours[ Math.round( Math.random() * (this.next_target.neighbours.length-1) ) ];
+	this.distance_left = this.mesh.position.distanceTo(this.next_target.vector);
+	this.step = this.next_target.initStep( this.mesh.position );
+	this.distance_last_check = 0;	
+	this.mesh.lookAt( this.next_target.vector );
+}
+
+tingCruising.prototype.set = function( target ) {	
+	this.mesh.position.copy( target.vector );
+	this.next_target = target;
+	this.findNextTarget();	
+}
+
+tingCruising.prototype.animationFrame = function( delta ) {
 		
-	this.animationFrame = function( delta ) {
+	if ( delta > 3 ) {			
+		/* if idle for more than 3 seconds jump right to next target */		
+		this.set( this.next_target );		
+	} else {
 		
 		/* check for new target */
-		if (this.distance_last_check > 100) {
-			this.last_distance = this.distance;
-			this.distance = this.mesh.position.distanceTo(this.targets[this.next_position].vector);
-			
-			if (this.distance > this.last_distance) {
-				this.next_position++;
-				if (this.next_position >= this.targets.length) {
-					this.next_position = 0;
-				}
-				this.distance = this.mesh.position.distanceTo(this.targets[this.next_position].vector);
-				this.targets[this.next_position].initStep( this.mesh.position );
-				this.distance_last_check = 0;
-				this.mesh.lookAt( this.targets[this.next_position].vector );
+		if (this.distance_last_check > this.check_interval) {
+			if ( this.distance_left <= 0 ) {
+				this.findNextTarget();			
 			}
+			this.distance_last_check = 0;
 		} else {
 			this.distance_last_check++;
 		}
 		
 		/* move mesh */
-		this.mesh.position.add( this.targets[this.next_position].getStep(delta) );
-	}
-	
-	this.calculateIterations = function() {
+		var step = new THREE.Vector3();	
+		step.copy( this.step );
+		step.multiplyScalar( delta );
+		this.distance_left -= step.length();
+		this.mesh.position.add( step );
 		
-		var prev_target, prev_pos, next_pos;
-		var diff = new THREE.Vector3();
-		
-		for ( var i = 0; i < this.targets.length; i++) {
-			if ( this.targets[i].iterations ) {
-				prev_target = (i == 0) ? this.targets.length-1 : i-1;
-				prev_pos = this.targets[prev_target].vector;
-				next_pos = this.targets[i].vector;
-				diff.subVectors( next_pos, prev_pos );
-				diff.divideScalar(this.targets[i].iterations);
-				for (var j = 1; j <= this.targets[i].iterations; j++) {
-					this.targets.splice( i, 0, new cruisingTarget( (prev_pos.x + (j * diff.x), prev_pos.y + (j * diff.y), prev_pos.z + (j * diff.z), this.targets[i].speed ) ) );
-				}
-			}		
+		if (this.next_target.coordSprite) {
+			this.next_target.coordSprite.position.copy( this.mesh.position );
+			this.next_target.coordSprite.position.y += 200;
 		}
 	}
+}
+	
+function cruisingTargets( params ) {	
+	this.targets = new Array();
 }
 
-function cruisingTarget(x, y, z, speed, iterations) {
+cruisingTargets.prototype.add = function( target ) {
+
+	var ins = true;
 	
-		this.vector = new THREE.Vector3(x,y,z);
-		this.speed = speed;
-		this.iterations = iterations;
-		this.step = new THREE.Vector3();
-		
-		this.initStep = function(position) {
-			this.step.subVectors(this.vector, position );
-			this.step.setLength(this.speed);
+	for (var i = 0, max = this.targets.length; i < max; i++ ) {
+		if (( this.targets[i].vector.x == target.vector.x ) 
+		&& ( this.targets[i].vector.y == target.vector.y ) 
+		&& ( this.targets[i].vector.z == target.vector.z ) ) {
+			_append( this.targets[i].neighbours, target.neighbours );
+			ins = false;
 		}
-		
-		this.getStep = function(delta) {
-			var step = new THREE.Vector3();
-			step.copy(this.step);
-			step.multiplyScalar(delta);
-			return step;
-		}
+	}
 	
+	if ( ins ) this.targets.push( target );
 }
+
+
+function cruisingTarget( x, y, z, speed ) {	
+	this.vector = new THREE.Vector3( x, y, z);
+	this.speed = speed;
+	this.neighbours = new Array();
+}
+
+cruisingTarget.prototype.initStep = function( position ) {
+	var step = new THREE.Vector3();
+	step.subVectors( this.vector, position );
+	step.setLength( this.speed );
+	return step;
+}
+	
+cruisingTarget.prototype.addToScene = function( n, scene ) {
+	this.coordSprite = makeTextSprite( " " + this.vector.x + "," + this.vector.z + " ", 
+		{ fontsize: 20, fontColor: {r:200, g:200, b:0, a:0.8},  borderColor: {r:200, g:200, b:0, a:1}, backgroundColor: {r:40, g:40, b:0, a:0.5} } );
+	this.coordSprite.position.copy ( this.vector ); 
+	this.coordSprite.position.y += 100;	
+	
+	this.nameSprite = makeTextSprite( " TiNG " + n + " ", { fontsize: 52, borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:20, g:20, b:30, a:0.5} } );
+	this.nameSprite.position.copy ( this.vector );
+	this.nameSprite.position.y += 300;
+	
+	var ch = (n % 2 == 0) ? " ~ " : " x ";
+	this.arrowSprite = makeTextSprite( ch , 
+		{ fontsize: 80, fontface:"Webdings", fontColor: {r:200, g:200, b:0, a:0.8},  borderColor: {r:200, g:200, b:0, a:1}, backgroundColor: {r:40, g:40, b:0, a:0.5} } );
+	this.arrowSprite.position.copy ( this.vector ); 
+	this.arrowSprite.position.y += 700;	
+	
+	scene.add( this.nameSprite );
+	scene.add( this.coordSprite );		
+	scene.add( this.arrowSprite );		
+}	
+	

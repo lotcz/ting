@@ -8,7 +8,7 @@ function tingStreet ( params ) {
 	this.wrapper.position.set ( this.startX, this.startY, this.startZ );
 	if (params.scene) params.scene.add( this.wrapper );	
 	geometry = new THREE.PlaneGeometry( this.length * this.scale, this.scale);
-	var texture = THREE.ImageUtils.loadTexture( "../images/street.jpg" );
+	var texture = THREE.ImageUtils.loadTexture( "images/street.jpg" );
 	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 	texture.repeat.set( this.length, 1 );
 	texture.anisotropy = MAX_ANISOTROPY;

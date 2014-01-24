@@ -5,11 +5,11 @@ function tingEagles(geometry, materials) {
 	this.material.morphTargets = true;
 	this.material.vertexColors = THREE.FaceColors;
 	this.speed = 40;
-
+/*
 	this.cruising = new tingCruising(this.eagles);
 	this.cruising.addTarget(0,0, -300, this.speed);
 	this.cruising.addTarget(10000, 100, 600, this.speed);
-
+*/
 	var eagle = new THREE.MorphAnimMesh( geometry, this.material );	
 	eagle.duration = 2;
 	eagle.eagle = true;
@@ -32,7 +32,6 @@ function tingEagles(geometry, materials) {
 	this.eagles.scale.set(0.2, 0.2, 0.2);
 	
 	this.addToScene = function (scene) {
-		this.eagles.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.eagles );
 		_append( scene.selectable, this.eagles.children );
 	}
@@ -41,7 +40,7 @@ function tingEagles(geometry, materials) {
 		for (var i = 0; i < this.eagles.children.length; i++) {
 			this.eagles.children[i].updateAnimation(delta);
 		}
-		this.cruising.animationFrame(delta);		
+		//this.cruising.animationFrame(delta);		
 	}
 	
 }

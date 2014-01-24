@@ -3,6 +3,7 @@ var WIDTH, HEIGHT, ASPECT, DELTA;
 var renderer, scene, camera, controls, clock, stats, light, cache;
 
 var animated = [];
+var buildings_cache;
 
 function animationFrame() {	
 	stats.begin();	
@@ -84,6 +85,7 @@ $( function () {
 
 	/* PLAY!!! */
 	
+	
 	var jsonCarLoader = new THREE.JSONLoader();
 	jsonCarLoader.load( "../models/buggy.js", 
 		function ( geometry, materials ) {
@@ -91,26 +93,43 @@ $( function () {
 		var car_material = new THREE.MeshFaceMaterial( materials );	
 		var car_geometry = geometry;
 		
-		/* OUR HERO */
+	
 		var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
 		var hero = new tingPlayer( {id:0, car:car} );
 		animated.push( hero );
-		
+	/*	
 		THREE.ImageUtils.loadTexture( "../images/ground3.jpg" , undefined, 
 			function ( texture ) {
 				var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
-				var city = new tingCity( {blocksA: 10, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+				buildings_cache = tingBuildingGenerateCache({scale:500});
+				var city = new tingCity( {startX:0, startY:0, startZ:-16000, blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );				
+				var city2 = new tingCity( {startX:city.length + 40000, startY:0, startZ:-16000,blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
 		} );
-			
+	*/	
 	} );
 
+	/*
+	var jsonBridgeLoader = new THREE.JSONLoader();
+	jsonBridgeLoader.load( "../models/bridge.js", function ( geometry, materials ) {
+		var material = new THREE.MeshFaceMaterial( materials );
+		var bridge = new THREE.Object3D();
+		var mesh = new THREE.Mesh( geometry, material );		
+		mesh.position.set( -810, -20, 245 );
+		mesh.rotation.y = - 0.820;
+		bridge.add( mesh );
+		bridge.scale.set( 60, 60, 60 );
+		bridge.position.set( 80000, 0, -1250 );
+		scene.add( bridge );
+	} );
+	*/
 	controls.freeze = false;
 	
-	
+	/*
 	clouds = new tingClouds({y:10000, separation:1500, scale:2000, amountX: 50, amountY:30, speed:2, amplitude:500});
 	animated.push( clouds );
 	clouds.addToScene( scene );
 	
+	*/
 	
 	/* stats */
 	stats = new Stats();

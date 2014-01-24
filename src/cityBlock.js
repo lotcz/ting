@@ -23,29 +23,32 @@ function tingCityBlock( params ) {
 	ground.rotation.x = -Math.PI/2;
 	this.wrapper.add( ground );
 	
-	var minX, minZ, maxX, maxZ, index;
-	var buildings = Math.round( this.sizeA * this.sizeB / 20 )
+	var minX, minZ, maxX, maxZ, index, b;
+	var buildings = Math.round( this.sizeA * this.sizeB / 25 )
 	var scrapers = Math.round( buildings / 10 );
 	
 	for (var i = 0, max = scrapers + buildings; i < max; i++ ) { 
 		
 		if (i < scrapers) {
-			index = Math.random() * params.cache.delimiter;
+			index = Math.round( Math.random() * params.cache.delimiter );
 		} else {
-			
+			index = Math.round( ( params.cache.delimiter + 1 ) + Math.random() * ( params.cache.length - params.cache.delimiter - 2 ) );
 		}
 		
-		minX = ( bwidth / 2 ) + this.scale ;
-		minZ = ( blength / 2 ) + this.scale ;
-		maxX = ((this.sizeA-1) * this.scale) - (bwidth/2);
-		maxZ = ((this.sizeB-1) * this.scale) - (blength/2);
-	
-		this.wrapper = building = params.cache.getMesh( );
-		this.wrapper.position = this.position;
+		b = params.cache[index].getMesh();
 		
-		params.scene.add( this.wrapper );
-
+		minX = ( b.geometry.width / 2 ) + this.scale ;
+		minZ = ( b.geometry.depth / 2 ) + this.scale ;
+		maxX = ( ( this.sizeA - 1 ) * this.scale ) - ( b.geometry.width / 2 );
+		maxZ = ( ( this.sizeB - 1 ) * this.scale ) - ( b.geometry.depth / 2 );
+	
+		b.position.set( minX + Math.random() * (maxX - minX), ( b.geometry.height / 2 ), minZ + Math.random() * (maxZ - minZ) );
+		
+		this.wrapper.add( b );
+		
 	}
+	
+	params.scene.add( this.wrapper );
 	
 	//console.log( this );
 

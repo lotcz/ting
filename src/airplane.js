@@ -5,6 +5,7 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.position = this.wrapper.position;
 	this.rotation = this.wrapper.rotation;
 	this.speed = 100;
+	/*
 	this.cruising = new tingCruising(this.wrapper);
 	this.cruising.addTarget(700,50,400, this.speed);
 	this.cruising.addTarget(10000,50,400, this.speed);
@@ -38,7 +39,6 @@ function tingAirplane(x, y, z, geometry, materials ) {
 	this.lights.push(new tingLight(-1200,800, 0, 0xF0F0FF, [0.2,0.2,1,0.2], this.wrapper));
 	
 	this.addToScene = function( scene ) {
-		this.wrapper.position.copy(this.cruising.targets[0].vector);
 		scene.add( this.wrapper );
 		scene.selectable.push( this.mesh );
 		//this.sound.play();
@@ -48,7 +48,7 @@ function tingAirplane(x, y, z, geometry, materials ) {
 		for (var i = 0; i < this.lights.length; i++ ) {
 			this.lights[i].animationFrame( delta );
 		}
-		this.cruising.animationFrame( delta );
+		//this.cruising.animationFrame( delta );
 	}
 	
 }

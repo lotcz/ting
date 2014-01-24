@@ -6,35 +6,14 @@ function tingCity( params ) {
 	this.blocksB = _coalesce( params.blocksB, 12 );	
 	this.blockSize = _coalesce( params.blockSize, 16 );	
 	this.scale = _coalesce( params.scale, 500 );
+	this.length = this.blocksA * this.blockSize * this.scale;
+	this.width = this.blocksB * this.blockSize * this.scale;
 	this.wrapper = new THREE.Object3D();
 	this.wrapper.position.set ( this.startX, this.startY, this.startZ );
 	if (params.scene) params.scene.add( this.wrapper );
 	this.speed = 1500;
 	this.cruisetargs = new cruisingTargets();	
-	
-	/* buildings cache */
-	this.cache = new Array();
-	this.cache.delimiter = 2; /* how many scrapers */	
-	for (var i = 0, max = 10; i < max; i++ ) { 
 		
-		if (i < scrapers) {
-			bwidth = this.scale + ( Math.random() * this.scale * 4 );
-			blength = this.scale + ( Math.random() * this.scale * 6 );
-			bheight = (this.scale*10) + ( Math.random() * this.scale * 20 )
-		} else {
-			bwidth = this.scale + ( Math.random() * this.scale * 8 );
-			blength = this.scale + ( Math.random() * this.scale * 8 );
-			bheight = this.scale + ( Math.random() * this.scale * 4 )
-		}
-		
-		this.cache.push( new tingBuilding( {			
-			width:bwidth, length:blength, height:bheight,
-			windowSizeX:70, windowSizeY:50, amount: 0.1 + (Math.random()*0.2),
-			minColor:new THREE.Color( 0xB0B0B0 ),
-			maxColor:new THREE.Color( 0xFFFFFF ),
-		}));
-	}
-	
 	var block, bsizeA, bsizeB, half = this.scale/2, tA, tB, tC, tD, tM, tN, tO, tP;
 		
 	for ( var b = 0; b < this.blocksB; b++ ) {
@@ -57,7 +36,7 @@ function tingCity( params ) {
 				block = new tingCityBlock( {
 					scene:this.wrapper,
 					startX: bx,	startZ: bz, sideA: bsa, sideB: bsb,
-					ground_material: params.ground_material, cache:this.cache
+					ground_material: params.ground_material, cache:buildings_cache
 				} );
 				
 				/* Cruising targets */
@@ -105,7 +84,7 @@ function tingCity( params ) {
 	}
 	
 	/* add cars */
-	for (var i = 0, max = this.cruisetargs.targets.length; i < max; i++ ) {
+	for (var i = 0, max = 9 /* this.cruisetargs.targets.length*/; i < max; i++ ) {
 		var car = new tingCar( { geometry:params.car_geometry, /*material:params.car_material,*/ scene:this.wrapper } );
 		car.mesh.rotation.y = Math.PI;
 		car.cruising = new tingCruising( { mesh:car.wrapper } );

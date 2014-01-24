@@ -1,10 +1,11 @@
 /* GLOBALS */
+var MAX_ANISOTROPY;
 var WIDTH, HEIGHT, ASPECT, DELTA, DEBUG_MODE;
-var clouds, skybox, mountains, airplane, eagles, cockpit;
+var clouds, skybox, mountains, airplane, eagles, cockpit, city1, city2, bridge;
 var audio, camera, clock, hud, loader, renderer, scene;
 var controls, navigation, mouse;
 var inspector, stats;
-
+var buildings_cache;
 var animated = [];
 var current_n = 0;
 
@@ -102,8 +103,8 @@ function resetTing(n) {
 			controls.reset();
 			skybox.rotation.set(0, 0.2, 0 );
 			skybox.position.set(camera.position.x + 10000, camera.position.y - 12000, camera.position.z);
-			airplane.cruising.reset();
-			eagles.cruising.reset();
+			//airplane.cruising.reset();
+			//eagles.cruising.reset();
 			if (!DEBUG_MODE) {
 				audio.song.play();
 			}
@@ -114,7 +115,7 @@ function resetTing(n) {
 
 function Loaded() {
 
-	DEBUG_MODE = true;
+	DEBUG_MODE = false;
 	
 	if (DEBUG_MODE) {
 		inspector = new tingInspector({});
@@ -148,6 +149,7 @@ function Start() {
 $( function () {
 
 	renderer = new THREE.WebGLRenderer();
+	MAX_ANISOTROPY = renderer.getMaxAnisotropy();
 	var container = $('#container');	
 	container.append(renderer.domElement);
 	hud = $('#hud');

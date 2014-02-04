@@ -111,20 +111,3 @@ tingPlayer.prototype.getJSON = function() {
 			rx:Math.round(this.car.wrapper.rotation.x * 100) / 100, ry:Math.round(this.car.wrapper.rotation.y * 100) / 100, rz:Math.round(this.car.wrapper.rotation.z * 100) / 100};
 }
 
-tingPlayer.prototype.animationFrame = function( delta ) {
-
-	if (camera.position.y < 100) {	
-		camera.position.y = 100;
-	}
-/*
-	if (camera.position.y > 3000) {
-		camera.position.y = 3000;
-	}
-*/
-	this.distanceToTarget = ( camera.position.y / 50 );
-	this.target_diff_x = controls.target.x - camera.position.x;
-	this.target_diff_z = controls.target.z - camera.position.z;
-	this.car.wrapper.position.x = camera.position.x + (this.target_diff_x * this.distanceToTarget);
-	this.car.wrapper.position.z = camera.position.z + (this.target_diff_z * this.distanceToTarget);
-	this.car.wrapper.lookAt(new THREE.Vector3( this.car.wrapper.position.x + this.target_diff_x, 0, this.car.wrapper.position.z + this.target_diff_z));			
-}

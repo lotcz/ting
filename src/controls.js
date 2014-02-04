@@ -17,6 +17,8 @@ function tingControls( params ) {
 	this.lon = 0;
 	this.phi = 0;
 	this.theta = 0;
+	this.driveBuggy = false;
+	this.buggy = false;
 	
 	this.handleResize = function () {
 		if ( this.element === document ) {
@@ -56,12 +58,31 @@ function tingControls( params ) {
 
 		this.camera.lookAt( this.target );
 		
+		if (this.driveBuggy && this.buggy) this.controlBuggy( delta );
 	}
 		
 	this.reset = function() {
 		this.lat = this.vertMin + ( (this.vertMax - this.vertMin) / 2 );
 		this.lon = this.horizMin + ( (this.horizMax - this.horizMin) / 2 );
 		this.animationFrame( 0 );
+	}
+	
+	this.controlBuggy = function( delta ) {
+		
+		if (camera.position.y < 100) {	
+			camera.position.y = 100;
+		}
+	/*
+		if (camera.position.y > 3000) {
+			camera.position.y = 3000;
+		}
+	*/
+		this.distanceToTarget = ( camera.position.y / 50 );
+		this.target_diff_x = controls.target.x - camera.position.x;
+		this.target_diff_z = controls.target.z - camera.position.z;
+		this.car.wrapper.position.x = this.camera.position.x + (this.target_diff_x * this.distanceToTarget);
+		this.car.wrapper.position.z = this.camera.position.z + (this.target_diff_z * this.distanceToTarget);
+		this.car.wrapper.lookAt(new THREE.Vector3( this.car.wrapper.position.x + this.target_diff_x, 0, this.car.wrapper.position.z + this.target_diff_z));			
 	}
 	
 	this.handleResize();

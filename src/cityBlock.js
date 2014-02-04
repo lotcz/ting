@@ -24,7 +24,7 @@ function tingCityBlock( params ) {
 	this.wrapper.add( ground );
 	
 	var minX, minZ, maxX, maxZ, index, b;
-	var buildings = Math.round( this.sizeA * this.sizeB / 25 )
+	var buildings = Math.round( this.sizeA * this.sizeB / 45 )
 	var scrapers = Math.round( buildings / 10 );
 	
 	for (var i = 0, max = scrapers + buildings; i < max; i++ ) { 

@@ -8,6 +8,7 @@ var inspector, stats;
 var buildings_cache;
 var animated = [];
 var current_n = 0;
+var _golden = 1.518;
 
 function OnDocumentMouseDown( event ) {
 	var x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -78,8 +79,7 @@ function animationFrame() {
 			navigation.animationFrame(DELTA);
 			break;
 	}	
-	
-	//skybox.position.set(camera.position.x, camera.position.y - 1000, camera.position.z);
+	renderer.clear();
 	renderer.render( scene, camera );	
 	if (stats) stats.end();
 };
@@ -92,48 +92,44 @@ function resetTing(n) {
 			controls.constrainVertical = false;		
 			break;
 		case 1:
-			controls.vertSpeed = 0.025;
-			controls.vertMin = -15;
+			DEBUG_MODE = false;
+			controls.vertSpeed = 0.1;
+			controls.vertMin = -25;
 			controls.vertMax = 15;
-			controls.horizSpeed = 0.025;
-			controls.horizMin = 25;
-			controls.horizMax = 65;
+			controls.horizSpeed = 0.1;
+			controls.horizMin = 33;
+			controls.horizMax = 100;
 			mouse.enabled = true;
-			camera.position.set(0,350,-500);
+			camera.position.set(0,50000,0);
 			controls.reset();
 			skybox.rotation.set(0, 0.2, 0 );
-			skybox.position.set(camera.position.x + 10000, camera.position.y - 12000, camera.position.z);
+			skybox.position.set(camera.position.x + 10000, camera.position.y - 10000, camera.position.z);
 			//airplane.cruising.reset();
 			//eagles.cruising.reset();
-			if (!DEBUG_MODE) {
+			if (audio.song) {
 				audio.song.play();
-			}
-			DEBUG_MODE = false;
+			}			
 		break;
 	}
 }
 
 function Loaded() {
+	/*
+	inspector = new tingInspector({});
+	inspector2 = new tingInspector({});
+	inspector.inspectObject3D( camera, 'Camera', 10, true );
+	inspector.inspectObject3D( skybox, 'Skybox', 100 );
+	inspector.inspectObject3D( airplane, 'Airplane', 10 );
+	scene.selectable.push(skybox);
+	*/
+	/* stats */
+	stats = new Stats();
+	stats.setMode(0); // 0: fps, 1: ms
 
-	DEBUG_MODE = false;
-	
-	if (DEBUG_MODE) {
-		inspector = new tingInspector({});
-		inspector2 = new tingInspector({});
-		inspector.inspectObject3D( camera, 'Camera', 10, true );
-		inspector.inspectObject3D( skybox, 'Skybox', 100 );
-		inspector.inspectObject3D( airplane, 'Airplane', 10 );
-		scene.selectable.push(skybox);
-		
-		/* stats */
-		stats = new Stats();
-		stats.setMode(0); // 0: fps, 1: ms
-
-		stats.domElement.style.position = 'absolute';
-		stats.domElement.style.left = '0px';
-		stats.domElement.style.top = '0px';
-		document.body.appendChild( stats.domElement );
-	}			
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
+	document.body.appendChild( stats.domElement );
 	
 	resetTing(1);	
 }

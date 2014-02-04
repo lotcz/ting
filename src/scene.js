@@ -7,7 +7,7 @@ function renderScene() {
 	scene = new THREE.Scene();
 	scene.selectable = [];
 	
-	camera = new THREE.PerspectiveCamera( 35, 1, 1, scale * 10000 );
+	camera = new THREE.PerspectiveCamera( 45, 1, 10, scale * 1200 );
 	scene.add(camera);
 	
 	/* CONTROLS */
@@ -25,13 +25,13 @@ function renderScene() {
 	var imagePrefix = "images/grim-";
 	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
 	var imageSuffix = ".png";
-	var skyGeometry = new THREE.CubeGeometry( scale * 500, scale * 500, scale * 500 );	
+	var skyGeometry = new THREE.CubeGeometry( scale * 1000, scale * 1000, scale * 1000 );	
 	var materialArray = [];
 	for (var i = 0; i < 6; i++)
 		materialArray.push( new THREE.MeshBasicMaterial({
 			map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
 			side: THREE.BackSide,
-			color: 0x909090
+			color: 0xe0e0e0
 		}));
 	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
 	skybox = new THREE.Mesh( skyGeometry, skyMaterial );	
@@ -55,19 +55,20 @@ function renderScene() {
 		/* OUR HERO */
 		var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
 		var hero = new tingPlayer( {id:0, car:car} );
-		animated.push( hero );
+		controls.buggy = hero.car;
 		
 		THREE.ImageUtils.loadTexture( "images/ground3.jpg" , undefined, 
 			function ( texture ) {
 				buildings_cache = tingBuildingGenerateCache({});
 				var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
-				city1 = new tingCity( {startX:0, startY:0, startZ:-16000, blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
-				city2 = new tingCity( {startX:city1.length + 40000, startY:0, startZ:-16000,blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+				city1 = new tingCity( {startX:0, startY:0, startZ:28500, blocksA: 1, blocksB:5, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+				city2 = new tingCity( {startX:city1.length, startY:0, startZ:28500+city1.width,blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
 		} );
 			
 	} );
 
 	/* BRIDGE */
+	/*
 	var jsonBridgeLoader = new THREE.JSONLoader();
 	jsonBridgeLoader.load( "models/bridge.js", function ( geometry, materials ) {
 		var material = new THREE.MeshFaceMaterial( materials );
@@ -80,7 +81,7 @@ function renderScene() {
 		bridge.position.set( 80000, 0, -1250 );
 		scene.add( bridge );
 	} );
-	
+	*/
 	/* AIRPLANE */
 	
 	loader.add('Airplane model');
@@ -109,10 +110,19 @@ function renderScene() {
 	/* CLOUDS */
 	
 	loader.add('Clouds');
-	clouds = new tingClouds( {x:-800, y:-220, z:-800, scale:2000, amountX: 30, amountY:30, separation: 250, amplitude:35, speed:1 } );
-	clouds.addToScene(scene);
-	animated.push(clouds);
-	loader.notify('Clouds');
+	THREE.ImageUtils.loadTexture( "images/cloud256.png" , undefined, 
+		function ( texture ) {
+			var material = new THREE.SpriteMaterial( { map: texture, opacity: 1 } );
+			clouds = new tingClouds( {x:-50000, y:15000, z:43000, scale:11000, amountX: 20, amountY:20, separation: 9000, amplitude:2000, speed:1, material:material } );
+			clouds.addToScene(scene);
+			_append(scene.selectable, clouds.wrapper.children );	
+			animated.push(clouds);
+			var clouds2 = new tingClouds( {x:-50000, y:18000, z:-4000, scale:11000, amountX: 20, amountY:4, separation: 9000, amplitude:2000, speed:1, material:material } );
+			clouds2.addToScene(scene);
+			loader.notify('Clouds');
+		} 
+	);
+		
 	
 	/* NAVIGATION LIGHTS */
 	/*

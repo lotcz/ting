@@ -41,41 +41,41 @@ function tingCity( params ) {
 				
 				/* Cruising targets */
 				tA = new cruisingTarget( bx + half, 0, bz + half, this.speed );
+				tA = this.cruisetargs.add( tA );
 				tB = new cruisingTarget( bx + (bsa*this.scale) - half, 0, bz + half, this.speed );
+				tB = this.cruisetargs.add( tB );
 				tC = new cruisingTarget( bx + (bsa*this.scale) - half, 0, bz + (bsb*this.scale) - half, this.speed );
+				tC = this.cruisetargs.add( tC );
 				tD = new cruisingTarget( bx + half, 0, bz + (bsb*this.scale) - half, this.speed );
+				tD = this.cruisetargs.add( tD );
 				
 				_append( tA.neighbours, [tB,tD] );
 				_append( tB.neighbours, [tA,tC] );
 				_append( tC.neighbours, [tB,tD] );
 				_append( tD.neighbours, [tA,tC] );
-				this.cruisetargs.add( tA );
-				this.cruisetargs.add( tB );
-				this.cruisetargs.add( tC );
-				this.cruisetargs.add( tD );
-				
+								
 				if ( (a+bsizeA) < this.blocksA ) {
 					tM = new cruisingTarget( bx + (bsa*this.scale) + half, 0, bz + half, this.speed );
+					tM = this.cruisetargs.add( tM );
 					_append( tM.neighbours, [tB] );
-					_append( tB.neighbours, [tM] );
-					this.cruisetargs.add( tM );
+					_append( tB.neighbours, [tM] );					
 					tN = new cruisingTarget( bx + (bsa*this.scale) + half, 0, bz + (bsb*this.scale) - half, this.speed );
+					tN = this.cruisetargs.add( tN );
 					_append( tN.neighbours, [tC] );
 					_append( tC.neighbours, [tN] );
-					this.cruisetargs.add( tN );
+					
 				}
 				
 				if ( (b+bsizeB) < this.blocksB ) {
 					tO = new cruisingTarget( bx + (bsa*this.scale) - half, 0, bz + (bsb*this.scale) + half, this.speed );
+					tO = this.cruisetargs.add( tO );
 					_append( tO.neighbours, [tC] );
-					_append( tC.neighbours, [tO] );
-					this.cruisetargs.add( tO );
+					_append( tC.neighbours, [tO] );					
 					tP = new cruisingTarget( bx + half, 0, bz + (bsb*this.scale) + half, this.speed );
+					tP = this.cruisetargs.add( tP );
 					_append( tP.neighbours, [tD] );
-					_append( tD.neighbours, [tP] );
-					this.cruisetargs.add( tP );
+					_append( tD.neighbours, [tP] );					
 				}
-
 			}
 			a += ( bsizeA - 1 );
 		}

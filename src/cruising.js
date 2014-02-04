@@ -7,7 +7,7 @@ function tingCruising( params ) {
 }
 
 tingCruising.prototype.findNextTarget = function( ) {	
-	this.next_target = this.next_target.neighbours[ Math.round( Math.random() * (this.next_target.neighbours.length-1) ) ];
+	this.next_target = this.next_target.neighbours[ Math.floor( Math.random() * (this.next_target.neighbours.length) ) ];
 	this.distance_left = this.mesh.position.distanceTo(this.next_target.vector);
 	this.step = this.next_target.initStep( this.mesh.position );
 	this.distance_last_check = 0;	
@@ -57,18 +57,17 @@ function cruisingTargets( params ) {
 
 cruisingTargets.prototype.add = function( target ) {
 
-	var ins = true;
-	
 	for (var i = 0, max = this.targets.length; i < max; i++ ) {
 		if (( this.targets[i].vector.x == target.vector.x ) 
 		&& ( this.targets[i].vector.y == target.vector.y ) 
 		&& ( this.targets[i].vector.z == target.vector.z ) ) {
 			_append( this.targets[i].neighbours, target.neighbours );
-			ins = false;
+			return this.targets[i]
 		}
 	}
 	
-	if ( ins ) this.targets.push( target );
+	this.targets.push( target );
+	return target;
 }
 
 

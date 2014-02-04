@@ -103,15 +103,15 @@ tingBuilding.prototype.getMesh = function( params ) {
 
 function tingBuildingGenerateCache( params ) {
 
-	var scale = _coalesce(params.scale, 100);
+	var scale = _coalesce(params.scale, 500);
 	var buildings_cache = new Array();
 	var bwidth, blength, bheight;
-	buildings_cache.delimiter = 5; /* how many scrapers */	
-	for (var i = 0, max = 20; i < max; i++ ) { 
+	buildings_cache.delimiter = 7; /* how many scrapers */	
+	for (var i = 0, max = 30; i < max; i++ ) { 
 		
 		if (i < buildings_cache.delimiter) {
-			bwidth = scale + ( Math.random() * scale * 4 );
-			blength = scale + ( Math.random() * scale * 6 );
+			bwidth = scale + ( Math.random() * scale * 5 );
+			blength = scale + ( Math.random() * scale * 5 );
 			bheight = (scale*10) + ( Math.random() * scale * 20 )
 		} else {
 			bwidth = scale + ( Math.random() * scale * 8 );

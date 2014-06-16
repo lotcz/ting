@@ -62,8 +62,7 @@ function tingCity( params ) {
 					tN = new cruisingTarget( bx + (bsa*this.scale) + half, 0, bz + (bsb*this.scale) - half, this.speed );
 					tN = this.cruisetargs.add( tN );
 					_append( tN.neighbours, [tC] );
-					_append( tC.neighbours, [tN] );
-					
+					_append( tC.neighbours, [tN] );					
 				}
 				
 				if ( (b+bsizeB) < this.blocksB ) {
@@ -84,9 +83,27 @@ function tingCity( params ) {
 	}
 	
 	/* add cars */
-	for (var i = 0, max = 9 /* this.cruisetargs.targets.length*/; i < max; i++ ) {
-		var car = new tingCar( { geometry:params.car_geometry, /*material:params.car_material,*/ scene:this.wrapper } );
-		car.mesh.rotation.y = Math.PI;
+	for (var i = 0, max = this.cruisetargs.targets.length; i < max; i++ ) {
+		
+		var material = params.car_material.clone();
+		for (var mi = 0, mmax = material.materials.length; mi < mmax; mi++) {
+			if (material.materials[mi].name == 'siva') {
+				material.materials[mi].color =  new THREE.Color(Math.random(), Math.random(), Math.random());
+				material.materials[mi].ambient =  new THREE.Color(Math.random(), Math.random(), Math.random());
+				material.materials[mi].emissive =  new THREE.Color(Math.random(), Math.random(), Math.random());
+			}
+		}
+		
+		var car = new tingCar( { geometry:params.car_geometry, material:material, animated:params.animated, scene:this.wrapper } );
+
+		/*
+		var geometry = new THREE.SphereGeometry();
+		var material = new THREE.MeshBasicMaterial({color:0xffffff});
+		var car = new THREE.Mesh( geometry, material );
+		this.wrapper.add( car );
+		*/
+		
+		
 		car.cruising = new tingCruising( { mesh:car.wrapper } );
 		car.cruising.set( this.cruisetargs.targets[i] );
 		params.animated.push( car.cruising );
@@ -98,11 +115,5 @@ function tingCity( params ) {
 	for (var i = 0, max = this.cruisetargs.targets.length; i < max; i++ ) {
 		this.cruisetargs.targets[i].addToScene( i, this.wrapper );
 	}
-	
-	/*
-	var cruising = new tingCruising( { mesh:camera } );
-	cruising.set( this.cruisetargs.targets[0] );
-	params.animated.push( cruising );
-	*/
-		
+			
 }

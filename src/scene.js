@@ -13,6 +13,8 @@ function renderScene() {
 	/* CONTROLS */
 			
 	controls = new tingControls({ "camera":camera, element: hud.element });
+	animated.push( controls );
+	
 	mouse = new mouseSelect();
 	
 	/* AUDIO */	
@@ -37,6 +39,10 @@ function renderScene() {
 	skybox = new THREE.Mesh( skyGeometry, skyMaterial );	
 	scene.add( skybox );
 	
+	/* LIGHT */
+	var light2 = new THREE.AmbientLight(0xf0f0f0);
+	scene.add(light2);
+	
 	/* MOUNTAINS */
 	/*
 	mountains = new tingMountains();
@@ -45,27 +51,35 @@ function renderScene() {
 	
 	/* THE CITY */
 	
-	var jsonCarLoader = new THREE.JSONLoader();
-	jsonCarLoader.load( "models/buggy.js", 
-		function ( geometry, materials ) {
-		 
-		var car_material = new THREE.MeshFaceMaterial( materials );	
-		var car_geometry = geometry;
-		
-		/* OUR HERO */
-		var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
-		var hero = new tingPlayer( {id:0, car:car} );
-		controls.buggy = hero.car;
-		
-		THREE.ImageUtils.loadTexture( "images/ground3.jpg" , undefined, 
-			function ( texture ) {
-				buildings_cache = tingBuildingGenerateCache({});
-				var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
-				city1 = new tingCity( {startX:0, startY:0, startZ:28500, blocksA: 1, blocksB:5, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
-				city2 = new tingCity( {startX:city1.length, startY:0, startZ:28500+city1.width,blocksA: 5, blocksB:4, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+	if (true) {
+		loader.add('The City');
+		var jsonCarLoader = new THREE.JSONLoader();
+		jsonCarLoader.load( "models/trabant.js", 
+			function ( geometry, materials ) {
+			 
+			var car_material = new THREE.MeshFaceMaterial( materials );	
+			var car_geometry = geometry;
+
+			/* OUR HERO */
+			if (true) {
+				var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
+				var hero = new tingPlayer( {id:0, car:car} );
+				controls.buggy = hero.car;
+			}
+						
+			if (true) {
+				THREE.ImageUtils.loadTexture( "images/ground3.jpg" , undefined, 
+					function ( texture ) {
+						buildings_cache = tingBuildingGenerateCache({});
+						var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
+						city1 = new tingCity( {startX:0, startY:0, startZ:28500, blocksA: 15, blocksB:2, "ground_material":ground_material, "car_material":car_material, "car_geometry":car_geometry, "animated":animated, "scene":scene } );
+						city2 = new tingCity( {startX: city1.startX, startY:0, startZ: (city1.startZ+city1.width), blocksA: 15, blocksB:2, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+						loader.notify('The City');
+				} );
+			}
+						
 		} );
-			
-	} );
+	}
 
 	/* BRIDGE */
 	/*
@@ -93,10 +107,9 @@ function renderScene() {
 		animated.push( airplane );
 		loader.notify('Airplane model');
 	} );
-	
-	
+		
 	/* EAGLES */
-	
+	/*
 	loader.add('Roaming eagles');
 	var jsonEaglesLoader = new THREE.JSONLoader();
 	jsonEaglesLoader.load( "models/eagle.js", function ( geometry, materials ) {
@@ -105,32 +118,37 @@ function renderScene() {
 		animated.push( eagles );
 		loader.notify('Roaming eagles');
 	} );
-	
+	*/
 	
 	/* CLOUDS */
 	
-	loader.add('Clouds');
-	THREE.ImageUtils.loadTexture( "images/cloud256.png" , undefined, 
-		function ( texture ) {
-			var material = new THREE.SpriteMaterial( { map: texture, opacity: 1 } );
-			clouds = new tingClouds( {x:-50000, y:15000, z:43000, scale:11000, amountX: 20, amountY:20, separation: 9000, amplitude:2000, speed:1, material:material } );
-			clouds.addToScene(scene);
-			_append(scene.selectable, clouds.wrapper.children );	
-			animated.push(clouds);
-			var clouds2 = new tingClouds( {x:-50000, y:18000, z:-4000, scale:11000, amountX: 20, amountY:4, separation: 9000, amplitude:2000, speed:1, material:material } );
-			clouds2.addToScene(scene);
-			loader.notify('Clouds');
-		} 
-	);
-		
+	if (true) {
+		loader.add('Clouds');
+		THREE.ImageUtils.loadTexture( "images/cloud256.png" , undefined, 
+			function ( texture ) {
+				var material = new THREE.SpriteMaterial( { map: texture, opacity: 1 } );
+				clouds = new tingClouds( {x:-50000, y:15000, z:43000, scale:11000, amountX: 20, amountY:20, separation: 9000, amplitude:2000, speed:1, material:material } );
+				clouds.addToScene(scene);
+				_append(scene.selectable, clouds.wrapper.children );	
+				animated.push(clouds);
+				var clouds2 = new tingClouds( {x:-50000, y:18000, z:-4000, scale:11000, amountX: 20, amountY:4, separation: 9000, amplitude:2000, speed:1, material:material } );
+				clouds2.addToScene(scene);
+				loader.notify('Clouds');
+			} 
+		);
+	}
 	
 	/* NAVIGATION LIGHTS */
-	/*
-	var light_start1 = new tingLight(0, 0, -600, 0xFF0000, [1], scene)
-	var light_start2 = new tingLight(0, 0, 600, 0x00FF00, [1], scene)
-	var light_finish1 = new tingLight(10000, 0, -600, 0xFF0000, [1], scene)
-	var light_finish2 = new tingLight(10000, 0, 600, 0x00FF00, [1], scene)
-	*/
+	if (true) {
+		var light_start1 = new tingLight(0, 0, 0, 0xFF0000, [0.3,10], scene)
+		animated.push( light_start1);
+		var light_start2 = new tingLight(0, 600, 0, 0x00FF00, [1,1], scene)
+		animated.push( light_start2);
+		/*
+		var light_finish1 = new tingLight(10000, 0, -600, 0xFF0000, [1], scene)
+		var light_finish2 = new tingLight(10000, 0, 600, 0x00FF00, [1], scene)
+		*/
+	}
 	
 	/* COCKPIT */
 	/*
@@ -141,6 +159,17 @@ function renderScene() {
 	scene.add( cockpit );
 	loader.notify('Cockpit');
 	*/
+	
+	/* STATS */
+	
+	if (false) {
+		stats = new Stats();
+		stats.setMode(0); // 0: fps, 1: ms
+		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.left = '0px';
+		stats.domElement.style.top = '0px';
+		document.body.appendChild( stats.domElement );
+	}
 	
 	OnWindowResize();
 	

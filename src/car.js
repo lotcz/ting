@@ -9,7 +9,7 @@ jsonCarLoader.load( "play/buggy.js", function ( carGeometry, materials ) {
 
 function tingCar( params ) {
 	
-	this.scale = _coalesce( params.scale, 150 );	
+	this.scale = _coalesce( params.scale, 40 );	
 	this.wrapper = new THREE.Object3D();
 	this.wrapper.scale.set( this.scale, this.scale, this.scale );	
 	this.mesh = new THREE.Mesh( params.geometry, params.material );		

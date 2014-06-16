@@ -7,17 +7,17 @@ var controls, navigation, mouse;
 var inspector, stats;
 var buildings_cache;
 var animated = [];
-var current_n = 0;
+var game_level = 0;
 var _golden = 1.518;
 
-function OnDocumentMouseDown( event ) {
+function OnMouseDown( event ) {
 	var x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	var y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 	mouse.mouseDown( x, y, camera, scene);
 }
 
-function OnDocumentMouseMove( event ) {
-	controls.onMouseMove( event );
+function OnMouseMove( event ) {
+	
 }
 
 function OnWindowResize() {
@@ -47,7 +47,8 @@ function OnKeyPress(e) {
 			break;
 		case 111 /* O */: 
 			//audio.source1.pause();
-			audio.song.stop();
+			resetTing(0);
+			//audio.song.stop();
 			break;
 		case 114 /* R */: 
 			resetTing(1);
@@ -57,51 +58,60 @@ function OnKeyPress(e) {
 	return false;
 }
 
+function OnKeyDown( e ) {
+	//controls.OnKeyDown( e );
+}
+
+function OnKeyUp( e ) {
+	//controls.OnKeyUp( e );
+}
+
 function animationFrame() {	
 	if (stats) stats.begin();	
 	requestAnimationFrame(animationFrame);	
 	DELTA = clock.getDelta();	
 	
-	if (!DEBUG_MODE) {
-		for(var i = 0, max = animated.length; i < max; i++) { 
-			animated[i].animationFrame(DELTA);
-		}
+	for(var i = 0, max = animated.length; i < max; i++) { 
+		animated[i].animationFrame(DELTA);
 	}
-	
-	switch (current_n) {
-		case 1 :
-			if (!DEBUG_MODE) {
-				controls.animationFrame(DELTA);
-			}
-			navigation.animationFrame(DELTA);
-			break;
-		case 2 :	
-			navigation.animationFrame(DELTA);
-			break;
-	}	
-	renderer.clear();
+		
+	//renderer.clear();
 	renderer.render( scene, camera );	
 	if (stats) stats.end();
 };
 
-function resetTing(n) {
-	current_n = n;
-	switch ( n ) {
+function resetTing(level) {
+	
+	game_level = level;
+	
+	switch ( game_level ) {
 		case 0:
-			DEBUG_MODE = true;
-			controls.constrainVertical = false;		
+			DEBUG_MODE = true;			
+			controls.resetToDefault();
+			controls.reset(-20, 75);
+			controls.driveBuggy = true;
+			camera.position.set(0,1000,0);
 			break;
 		case 1:
-			DEBUG_MODE = false;
+			DEBUG_MODE = false;			
 			controls.vertSpeed = 0.1;
+			controls.vertLockEnabled = true;
 			controls.vertMin = -25;
 			controls.vertMax = 15;
 			controls.horizSpeed = 0.1;
+			controls.horizLockEnabled = true;
 			controls.horizMin = 33;
 			controls.horizMax = 100;
+			controls.lookEnabled = true;
+			controls.movementEnabled = false;
+			
+			
+			controls.reset();			
+			
 			mouse.enabled = true;
+						
 			camera.position.set(0,50000,0);
-			controls.reset();
+			
 			skybox.rotation.set(0, 0.2, 0 );
 			skybox.position.set(camera.position.x + 10000, camera.position.y - 10000, camera.position.z);
 			//airplane.cruising.reset();
@@ -122,16 +132,9 @@ function Loaded() {
 	inspector.inspectObject3D( airplane, 'Airplane', 10 );
 	scene.selectable.push(skybox);
 	*/
-	/* stats */
-	stats = new Stats();
-	stats.setMode(0); // 0: fps, 1: ms
-
-	stats.domElement.style.position = 'absolute';
-	stats.domElement.style.left = '0px';
-	stats.domElement.style.top = '0px';
-	document.body.appendChild( stats.domElement );
 	
-	resetTing(1);	
+	
+	resetTing(0);	
 }
 
 function Start() {
@@ -154,8 +157,10 @@ $( function () {
 	
 	window.addEventListener('resize', OnWindowResize, false);
 	document.addEventListener( 'keypress', OnKeyPress, false );
-	hud.bind( 'mousedown', OnDocumentMouseDown );
-	hud.bind( 'mousemove', OnDocumentMouseMove );
+	document.addEventListener( 'keydown', OnKeyDown, false );
+	document.addEventListener( 'keyup', OnKeyUp, false );
+	hud.bind( 'mousedown', OnMouseDown );
+	hud.bind( 'mousemove', OnMouseMove );
 		
 });
 

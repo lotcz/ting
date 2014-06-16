@@ -70,6 +70,14 @@ cruisingTargets.prototype.add = function( target ) {
 	return target;
 }
 
+cruisingTargets.prototype.chain = function( target ) {	
+	this.targets[this.targets.length-1].neighbours.push( target );
+	this.targets.push( target );
+}
+
+cruisingTargets.prototype.closeCircle = function( ) {
+	this.targets[this.targets.length-1].neighbours.push( this.targets[0] );
+}
 
 function cruisingTarget( x, y, z, speed ) {	
 	this.vector = new THREE.Vector3( x, y, z);

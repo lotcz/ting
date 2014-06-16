@@ -34,17 +34,11 @@ function OnWindowResize() {
 
 
 function OnKeyPress(e) {
-	var key = e.keyCode ? e.keyCode : e.charCode;
-	
-	//console.log("key:" + key);
-	
+	var key = e.keyCode ? e.keyCode : e.charCode;	
+	//console.log("key:" + key);	
 	switch ( key ) {
-
-		case 102 /* F */: controls.freeze=!controls.freeze;break;
 		case 108 /* L */: light.visible = !light.visible;break;
-		case 114 /* R */: multiplayer.resetGame();break;
-	}
-	
+	}	
 	return false;
 }
 
@@ -102,7 +96,6 @@ $( function () {
 	tile.position.set( 0, 5000, 5000); 
 	scene.add( tile );
 	
-	var tile_geometry = new THREE.PlaneGeometry( 10000, 10000 );
 	var tile_texture = THREE.ImageUtils.loadTexture( "floor-rock1.jpg" );
 	tile_texture.wrapS = tile_texture.wrapT = THREE.RepeatWrapping;
 	tile_texture.repeat.set( 10, 10 );
@@ -110,6 +103,16 @@ $( function () {
 	var tile = new THREE.Mesh( tile_geometry, tile_material );			
 	tile.position.set( 0, 5000, -5000); 
 	scene.add( tile );
+	
+	var cube_texture = THREE.ImageUtils.loadTexture( "floor-rock1.jpg" );
+	cube_texture.wrapS = cube_texture.wrapT = THREE.RepeatWrapping;
+	cube_texture.repeat.set( 3, 3 );
+	var cube_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: cube_texture, side: THREE.DoubleSide } );
+	var cube_geometry = new THREE.CubeGeometry( 1000, 1000, 1000 );
+	var cube = new THREE.Mesh( cube_geometry, cube_material );	
+	//cube.scale.set(100, 100, 100);
+	cube.position.set( 3000, 1000, 3000); 
+	scene.add( cube );
 	
 	/* stats */
 	stats = new Stats();

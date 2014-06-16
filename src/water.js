@@ -18,7 +18,7 @@ function tingWater ( params ) {
 	this.sizeX = 10000;
 	this.sizeZ = 10000;
 	this.sizeY = 5000;
-	
+		
 	/* floor */
 	
 	var floor_geometry = new THREE.PlaneGeometry( this.sizeX, this.sizeZ );	
@@ -71,8 +71,7 @@ function tingWater ( params ) {
 	
 	this.box = new THREE.Box3();
 	this.box.setFromObject(this.wrapper);
-	//this.box.max.y -= (2 * this.amplitude);
-	
+
 	this.animationFrame = function (delta) {
 		if (this.enabled) {
 			var i = 0, vertex;
@@ -86,11 +85,9 @@ function tingWater ( params ) {
 			this.mesh.geometry.verticesNeedUpdate = true;
 			
 			if (this.box.containsPoint(camera.position)) {
-				this.fog.density = ( 1.1 - ( 0.5 * Math.abs( camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
-				console.log("in");
+				this.fog.density = ( 1 - ( 0.8 * Math.abs( camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
 			} else {
 				this.fog.density = 0;
-				console.log("out");
 			}
 		}		
 	}

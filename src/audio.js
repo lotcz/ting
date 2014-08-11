@@ -1,5 +1,4 @@
 function tingAudio( onloaded ) {
-
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	this.context = new AudioContext();
 	var _audio = this;
@@ -10,9 +9,8 @@ function tingAudio( onloaded ) {
 		/*	_audio.airplane = new tingSound( _audio.context, bufferList[1], 0.1 );
 		_audio.eagle = new tingSound( _audio.context, bufferList[2], 1 );
 		*/
-		/*
-		_audio.song = new tingSound( _audio.context, bufferList[3], 1 );	
-		*/
+		_audio.song = new tingSound( _audio.context, bufferList[1], 1 );	
+		
 		onloaded();
 	}
 	
@@ -22,11 +20,11 @@ function tingAudio( onloaded ) {
 		  'sound/cloud2.mp3',/*
 		  'sound/airplane.mp3',
 		  'sound/eagle.mp3',*/
-		  /*'sound/ktpd.mp3',*/
+		  'sound/ktpd.mp3',
 		],
 		this.finishedLoading
 	);
-
+	
 	this.bufferLoader.load();
 }
 

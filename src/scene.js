@@ -56,29 +56,32 @@ function renderScene() {
 		var jsonCarLoader = new THREE.JSONLoader();
 		jsonCarLoader.load( "models/trabant.js", 
 			function ( geometry, materials ) {
-			 
-			var car_material = new THREE.MeshFaceMaterial( materials );	
-			var car_geometry = geometry;
+				for (var m = 0, maxm = materials.length; m < maxm; m++) {
+					materials[m].side = THREE.DoubleSide;
+				}
+				var car_material = new THREE.MeshFaceMaterial( materials );	
+				var car_geometry = geometry;
 
-			/* OUR HERO */
-			if (true) {
-				var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
-				var hero = new tingPlayer( {id:0, car:car} );
-				controls.buggy = hero.car;
-			}
+				/* OUR HERO */
+				if (true) {
+					var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
+					var hero = new tingPlayer( {id:0, car:car} );
+					controls.buggy = hero.car;
+				}
+							
+				if (true) {
+					THREE.ImageUtils.loadTexture( "images/ground3.jpg" , undefined, 
+						function ( texture ) {
+							buildings_cache = tingBuildingGenerateCache({});
+							var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
+							city1 = new tingCity( {startX:0, startY:0, startZ:28500, blocksA: 15, blocksB:2, "ground_material":ground_material, "car_material":car_material, "car_geometry":car_geometry, "animated":animated, "scene":scene } );
+							city2 = new tingCity( {startX: city1.startX, startY:0, startZ: (city1.startZ+city1.width), blocksA: 15, blocksB:2, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
+							loader.notify('The City');
+					} );
+				}
 						
-			if (true) {
-				THREE.ImageUtils.loadTexture( "images/ground3.jpg" , undefined, 
-					function ( texture ) {
-						buildings_cache = tingBuildingGenerateCache({});
-						var ground_material = new THREE.MeshBasicMaterial( { map:texture } );	
-						city1 = new tingCity( {startX:0, startY:0, startZ:28500, blocksA: 15, blocksB:2, "ground_material":ground_material, "car_material":car_material, "car_geometry":car_geometry, "animated":animated, "scene":scene } );
-						city2 = new tingCity( {startX: city1.startX, startY:0, startZ: (city1.startZ+city1.width), blocksA: 15, blocksB:2, ground_material:ground_material, car_material:car_material, car_geometry:car_geometry, animated:animated, scene:scene } );
-						loader.notify('The City');
-				} );
-			}
-						
-		} );
+			} 
+		);
 	}
 
 	/* BRIDGE */

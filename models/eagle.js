@@ -1,5 +1,9 @@
 {
-
+	"metadata" :
+	{
+		"formatVersion" : 2
+	},
+	
     "version" : 2,
     
     "scale" : 1.000000,

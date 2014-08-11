@@ -39,8 +39,8 @@ function mouseSelect() {
 			if (this.findIntersection(x, y, camera, scene )) {
 				console.log(this.intersected);
 				if (this.intersected.object) {
-					inspector2.reset();
-					inspector2.inspectObject3D(this.intersected.object, 'Selected', 10, true );
+					//inspector2.reset();
+					//inspector2.inspectObject3D(this.intersected.object, 'Selected', 10, true );
 				}				
 			}
 		} else if (this.enabled) {

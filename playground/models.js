@@ -63,7 +63,7 @@ $( function () {
 	scene.add(camera);
 	
 	light = new THREE.PointLight(0xFFFFFF);
-	light.position.set( 0, 10000, 0 );
+	light.position.set( 0, 15000, 0 );
 	scene.add(light);
 	
 	var light2 = new THREE.AmbientLight(0xf0f0f0);
@@ -186,6 +186,24 @@ $( function () {
 			mesh.position.y = 2000;
 			mesh.position.x = 3200;
 			mesh.position.z = 3200;
+			scene.add( mesh );
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/monkey_par.js",  
+		function ( geometry, materials ) {	
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+			}
+			
+			var material = new THREE.MeshFaceMaterial( materials );
+			
+			var mesh = new THREE.Mesh( geometry, material );			
+			mesh.scale.set( 50, 50, 50 );
+			mesh.position.y = 4500;
+			mesh.position.x = 1000;
+			mesh.position.z = 0;
 			scene.add( mesh );
 		}
 	);

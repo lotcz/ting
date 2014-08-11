@@ -134,7 +134,7 @@ function Loaded() {
 	*/
 	
 	
-	resetTing(0);	
+	resetTing(1);	
 }
 
 function Start() {

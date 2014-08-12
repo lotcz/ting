@@ -78,9 +78,12 @@ function tingControls( params ) {
 				case 39: /*right*/
 				case 68: /*D*/ this.moveRight = false; break;
 				case 82: /*R*/ this.moveUp = false; break;
-				case 70: /*F*/ this.moveDown = false; break;
-				case 80: /*P*/ this.lookEnabled=!this.lookEnabled;break;
+				case 70: /*F*/ this.moveDown = false; break;				
 			}
+		}
+		
+		switch( key ) {
+			case 80: /*P*/ this.lookEnabled=!this.lookEnabled;break;
 		}
 	};
 
@@ -125,8 +128,7 @@ function tingControls( params ) {
 		this.animationFrame( 0 );		
 	}
 	
-	this.resetToDefault = function() {
-		
+	this.resetToDefault = function() {		
 		this.lookEnabled = true;
 		this.movementEnabled = true;
 		this.horizLockEnabled = false;		

@@ -134,7 +134,7 @@ $( function () {
 			var material = new THREE.SpriteMaterial( { map: texture, opacity: 1 } );
 			clouds = new tingClouds( {x:-40000, y:-20000, z:-40000, scale:10000, amountX: 20, amountY:60, separation: 6000, amplitude:1500, speed:1, material:material } );
 			clouds.addToScene(scene);			
-			//animated.push(clouds);			
+			animated.push(clouds);			
 		} 
 	);
 		

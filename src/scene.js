@@ -12,16 +12,19 @@ function renderScene() {
 	
 	/* CONTROLS */
 			
-	controls = new tingControls({ "camera":camera, element: hud.element });
+	controls = new tingControls({ "camera":camera/*, "element": hud.element*/ });
 	animated.push( controls );
+	
+	resetTing(0);
 	
 	mouse = new mouseSelect();
 	
 	/* AUDIO */	
 	
-	loader.add('Audio tracks');
-	audio = new tingAudio( function () { loader.notify('Audio tracks'); } );
-	
+	if (false) {
+		loader.add('Audio tracks');
+		audio = new tingAudio( function () { loader.notify('Audio tracks'); } );
+	}
 	
 	/* SKYBOX */
 	var imagePrefix = "images/grim-";
@@ -63,7 +66,7 @@ function renderScene() {
 				var car_geometry = geometry;
 
 				/* OUR HERO */
-				if (true) {
+				if (false) {
 					var car = new tingCar( {geometry:car_geometry, material:car_material, scene:scene, animated:animated } );
 					var hero = new tingPlayer( {id:0, car:car} );
 					controls.buggy = hero.car;
@@ -100,7 +103,7 @@ function renderScene() {
 	} );
 	*/
 	/* AIRPLANE */
-	
+	/*
 	loader.add('Airplane model');
 	var jsonAirplaneLoader = new THREE.JSONLoader();
 	jsonAirplaneLoader.load( "models/airplane.js", function ( geometry, materials ) {
@@ -110,7 +113,7 @@ function renderScene() {
 		animated.push( airplane );
 		loader.notify('Airplane model');
 	} );
-		
+		*/
 	/* EAGLES */
 	/*
 	loader.add('Roaming eagles');
@@ -125,7 +128,7 @@ function renderScene() {
 	
 	/* CLOUDS */
 	
-	if (true) {
+	if (false) {
 		loader.add('Clouds');
 		THREE.ImageUtils.loadTexture( "images/cloud256.png" , undefined, 
 			function ( texture ) {

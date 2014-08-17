@@ -38,6 +38,7 @@ body {
 #ting-loader {
 	margin: 25px auto;	
 	text-align:center;
+	background-color:transparent;
 }
 
 #ting-loader .title-image {

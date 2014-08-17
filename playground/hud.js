@@ -2,7 +2,8 @@ var MAX_ANISOTROPY, DEBUG_MODE = false;
 var WIDTH, HEIGHT, ASPECT, DELTA;
 var renderer, scene, camera, controls, clock, stats, light;
 var animated = [];
-			
+var hud;
+	
 function animationFrame() {	
 	stats.begin();	
 	requestAnimationFrame(animationFrame);	
@@ -25,18 +26,24 @@ function OnWindowResize() {
 	camera.aspect = ASPECT;
 	camera.updateProjectionMatrix();	
 	controls.handleResize();
+	hud.OnResize( {"width":WIDTH, "height":HEIGHT} );
 }
 		
 function OnKeyPress(e) {
 	
-	if (false) {
+	if (true) {
 		var key = e.keyCode ? e.keyCode : e.charCode;
 		
-		//console.log("key:" + key);
+		console.log("key:" + key);
 		
 		switch ( key ) {
 
 			case 108 /* L */: light.visible = !light.visible;break;
+			case 116 /* T */: hud.warning("Beep. TEST.");break;
+			case 103 /* G */: 
+				hud.specialMessage( {image:"../images/characters/monkey.png",text:"Hello! My name is Monkey. I am a superhero. Special message for you."});
+				
+			break;
 		
 		}
 	}
@@ -49,7 +56,7 @@ $( function () {
 
 	var $container = $('#container');	
 	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor( 0xefd1b5 );
+	renderer.setClearColor( 0x202020 );
 	MAX_ANISOTROPY = renderer.getMaxAnisotropy();
 	$container.append(renderer.domElement);
 	
@@ -75,7 +82,13 @@ $( function () {
 	controls.resetToDefault();
 	controls.movementSpeed = 500;
 	animated.push( controls );
-		
+	
+	/* HUD */
+	hud = new tingHUD( {"element":$("#hud"), "width":WIDTH, "height":HEIGHT} );
+	hud.warning("Hello! This a test of H.U.D. messages.");
+	hud.error("No Error this time you lucky bastard.");
+	hud.message("Press \"T\" or \"G\" for test.");
+	
 	/* AXIS */
 	
 	var ax = new axis( { scene:scene } );

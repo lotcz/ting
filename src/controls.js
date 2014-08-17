@@ -29,8 +29,8 @@ function tingControls( params ) {
 			this.viewHalfX = window.innerWidth / 2;
 			this.viewHalfY = window.innerHeight / 2;
 		} else {
-			this.viewHalfX = this.domElement.offsetWidth / 2;
-			this.viewHalfY = this.domElement.offsetHeight / 2;
+			this.viewHalfX = this.element.offsetWidth / 2;
+			this.viewHalfY = this.element.offsetHeight / 2;
 		}
 	}
 	

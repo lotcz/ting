@@ -144,8 +144,8 @@ $( function () {
 			animated.push(flock);
 			
 			var cruising_targets = new cruisingTargets();
-			cruising_targets.add(new cruisingTarget(-2500,17500,2500, 400));
-			cruising_targets.chain(new cruisingTarget(4500,17500,-4500, 400));
+			cruising_targets.add(new cruisingTarget(5000,31000,-10000, 400));
+			cruising_targets.chain(new cruisingTarget(5000,31000,10000, 400));			
 			cruising_targets.closeCircle();
 			var cruising = new tingCruising({"mesh":flock.wrapper});			
 			cruising.set(cruising_targets.targets[0]);

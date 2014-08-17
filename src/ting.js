@@ -1,14 +1,18 @@
 /* GLOBALS */
 var MAX_ANISOTROPY;
 var WIDTH, HEIGHT, ASPECT, DELTA, DEBUG_MODE;
-var clouds, skybox, mountains, airplane, eagles, cockpit, city1, city2, bridge;
+var clouds, skybox, airplane, eagles, city1, city2;
 var audio, camera, clock, hud, loader, renderer, scene;
-var controls, navigation, mouse;
+var controls, mouse;
 var inspector, stats;
 var buildings_cache;
 var animated = [];
-var game_level = 0;
 var _golden = 1.518;
+
+var game_level = 0;
+/* 	0 - debug
+	1 - clouds 
+*/
 
 function OnMouseDown( event ) {
 	var x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -28,6 +32,7 @@ function OnWindowResize() {
 	camera.aspect = ASPECT;
 	camera.updateProjectionMatrix();	
 	controls.handleResize();
+	hud.OnResize( { "width":WIDTH, "height":HEIGHT } );
 	//cockpit.scale.set(WIDTH,HEIGHT,1);
 }
 
@@ -42,8 +47,7 @@ function OnKeyPress(e) {
 		case 107 /* K */: ambient_light.visible = !ambient_light.visible;break;
 		case 108 /* L */: console.log("x:" + camera.position.x + " y:" + camera.position.y + " z:" + camera.position.z + " rotation:" + camera.rotation.x + "," + camera.rotation.y + "," + camera.rotation.z);break; 
 		case 109 /* M */: 
-			var array =  Array.prototype.slice.call( mountains.data );
-			$("#txt1").val(array.toString());
+			
 			break;
 		case 111 /* O */: 
 			//audio.source1.pause();
@@ -87,13 +91,13 @@ function resetTing(level) {
 	switch ( game_level ) {
 		case 0:
 			DEBUG_MODE = true;			
-			controls.resetToDefault();
-			controls.reset(-20, 75);
-			controls.driveBuggy = true;
-			camera.position.set(0,1000,0);
+			controls.enabled = false;			
+			camera.position.set(41272,760,6698);
+			camera.rotation.set(2.8987455818690973,0.15293460372495132,-3.1038706087248347 );
 			break;
 		case 1:
-			DEBUG_MODE = false;			
+			DEBUG_MODE = false;		
+			controls.enabled = true;
 			controls.vertSpeed = 0.1;
 			controls.vertLockEnabled = true;
 			controls.vertMin = -25;
@@ -104,20 +108,17 @@ function resetTing(level) {
 			controls.horizMax = 100;
 			controls.lookEnabled = true;
 			controls.movementEnabled = false;
-			
-			
 			controls.reset();			
-			
 			mouse.enabled = true;
-						
 			camera.position.set(0,50000,0);
-			
 			skybox.rotation.set(0, 0.2, 0 );
 			skybox.position.set(camera.position.x + 10000, camera.position.y - 10000, camera.position.z);
 			//airplane.cruising.reset();
 			//eagles.cruising.reset();
-			if (audio.song) {
-				audio.song.play();
+			if (audio) {
+				if (audio.song) {
+					audio.song.play();
+				}
 			}			
 		break;
 	}
@@ -132,15 +133,13 @@ function Loaded() {
 	inspector.inspectObject3D( airplane, 'Airplane', 10 );
 	scene.selectable.push(skybox);
 	*/
-	
-	
-	resetTing(1);	
+		
+	clock = new THREE.Clock(true);	
 }
 
-function Start() {
-	clock = new THREE.Clock(true);	
-	animationFrame();		
-	hud.animate({opacity:0}, 500 );		
+function Start() {				
+	loader.element.animate({opacity:0}, 500 );
+	resetTing(1);	
 }
 
 	
@@ -148,20 +147,19 @@ function Start() {
 $( function () {
 
 	renderer = new THREE.WebGLRenderer();
-	MAX_ANISOTROPY = renderer.getMaxAnisotropy();
+	MAX_ANISOTROPY = 1;renderer.getMaxAnisotropy();
 	var container = $('#container');	
 	container.append(renderer.domElement);
-	hud = $('#hud');
-	loader = new tingLoader( $("#ting-loader", hud), Loaded, Start );
+	hud = new tingHUD( { "element":$('#hud') } );
+	loader = new tingLoader( $("#ting-loader", hud.element), Loaded, Start );
 	renderScene();
 	
 	window.addEventListener('resize', OnWindowResize, false);
 	document.addEventListener( 'keypress', OnKeyPress, false );
 	document.addEventListener( 'keydown', OnKeyDown, false );
 	document.addEventListener( 'keyup', OnKeyUp, false );
-	hud.bind( 'mousedown', OnMouseDown );
-	hud.bind( 'mousemove', OnMouseMove );
-		
+	
+	animationFrame();
 });
 
 

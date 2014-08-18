@@ -2,7 +2,7 @@ var MAX_ANISOTROPY, DEBUG_MODE = false;
 var WIDTH, HEIGHT, ASPECT, DELTA;
 var renderer, scene, camera, controls, clock, stats, light;
 var animated = [];
-var hud;
+var hud, resources;
 	
 function animationFrame() {	
 	stats.begin();	
@@ -14,7 +14,7 @@ function animationFrame() {
 		animated[i].animationFrame( DELTA );
 	}			
 		
-	renderer.render( scene, camera );	
+	renderer.render( scene.scene, scene.camera );	
 	stats.end();
 };
 	
@@ -23,8 +23,8 @@ function OnWindowResize() {
 	HEIGHT = window.innerHeight - 5;
 	ASPECT = WIDTH / HEIGHT;
 	renderer.setSize( WIDTH, HEIGHT );
-	camera.aspect = ASPECT;
-	camera.updateProjectionMatrix();	
+	scene.camera.aspect = ASPECT;
+	scene.camera.updateProjectionMatrix();	
 	controls.handleResize();
 	hud.OnResize( {"width":WIDTH, "height":HEIGHT} );
 }
@@ -34,11 +34,14 @@ function OnKeyPress(e) {
 	if (true) {
 		var key = e.keyCode ? e.keyCode : e.charCode;
 		
-		console.log("key:" + key);
+		//console.log("key:" + key);
 		
 		switch ( key ) {
 
-			case 108 /* L */: light.visible = !light.visible;break;
+			case 108 /* L */: 
+				scene.ambientLight.visible = scene.pointLight.visible = !scene.ambientLight.visible; 
+				hud.warning("Light is <b>" + ((scene.ambientLight.visible) ? "On" : "Off") + "</b>.");
+				break;
 			case 116 /* T */: 
 				hud.message("C est le message.");
 				hud.warning("Beep. Lorem beep ipsum beep.");
@@ -59,106 +62,93 @@ function OnKeyPress(e) {
 	return false;
 }
 
+function Loaded() {
+	scene.initScene( { "resources":resources} );
+}
+
+function Start() {	
+	loader.element.animate({opacity:0}, 500 );
+	controls.lookEnabled = controls.movementEnabled = true;
+	scene.resetScene();
+	hud.warning("Hello! This a test of <b>Scene 0</b>.");	
+}
+
 /* INIT */	
 $( function () {
 
 	var $container = $('#container');	
 	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor( 0x202020 );
+	renderer.setClearColor( 0x101010 );
 	MAX_ANISOTROPY = renderer.getMaxAnisotropy();
 	$container.append(renderer.domElement);
 	
 	window.addEventListener('resize', OnWindowResize, false);
 	document.addEventListener( 'keypress', OnKeyPress, false );
-	
-	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera( 45, 1, 1, 100000 );
-	camera.position.set( 1000, 3000, 1000 );
-	scene.add(camera);
-	
-	//scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0025 );
-	
-	var light2 = new THREE.PointLight(0xFFFFFF);
-	light2.position.set( 0, 3000, 0 );
-	scene.add(light2);
-	
-	
-	light = new THREE.AmbientLight(0xf0f0f0);
-	scene.add(light);
-	
-	controls = new tingControls({ "camera":camera, element: document });
-	controls.resetToDefault();
-	controls.movementSpeed = 500;
-	animated.push( controls );
-	
+
 	/* HUD */
 	hud = new tingHUD( {"element":$("#hud"), "width":WIDTH, "height":HEIGHT} );
-	hud.warning("Hello! This a test of <b>H.U.D.</b> messages.");
-	hud.error("No Error this time you lucky bastard.");
-	hud.message("Press \"<b>T</b>\" or \"<b>G</b>\" for test.");
 	
-	/* AXIS */
+	loader = new tingLoader( $("#ting-loader", hud.element), Loaded, Start );
 	
-	var ax = new axis( { scene:scene } );
+	scene = new tingScene0( {} );
 		
-	/* PLAY!!! */
+	controls = new tingControls({ "camera":scene.camera, element: document });
+	controls.resetToDefault();
+	controls.movementSpeed = 500;
+	controls.lookEnabled = controls.movementEnabled = false;
+	animated.push( controls );
 	
-	var loader = new THREE.JSONLoader();
-	loader.load( "../models/monkey.js",  
-		function ( geometry, materials ) {	
-			
+	
+	/* SCENE */
+	
+	loader.add('Scene initialization');
+	resources = [];
+
+	loader.add('Monkey');
+	var resLoader = new THREE.JSONLoader();
+	resLoader.load( "../models/monkey.js",  
+		function ( geometry, materials ) {				
 			for (var m = 0, maxm = materials.length; m < maxm; m++) {
 				materials[m].side = THREE.DoubleSide;
-			}
-			
-			var material = new THREE.MeshFaceMaterial( materials );
-			
-			var mesh = new THREE.Mesh( geometry, material );			
-			mesh.scale.set( 200, 200, 200 );
-			mesh.position.set( 0, 1000, 0 );
-			scene.add( mesh );
-						
-			//animated.push(cruising);
+			}			
+			resources["monkey_material"] = new THREE.MeshFaceMaterial( materials );
+			resources["monkey_geometry"] = geometry;
+			loader.notify('Monkey');
 		}
 	);
 	
-	var loader = new THREE.JSONLoader();
-	loader.load( "../models/monkey_rig.js",  
-		function ( geometry, materials ) {	
-			
+	loader.add('Trabant');
+	var jsonCarLoader = new THREE.JSONLoader();
+	jsonCarLoader.load( "../models/trabant.js", 
+		function ( geometry, materials ) {
 			for (var m = 0, maxm = materials.length; m < maxm; m++) {
 				materials[m].side = THREE.DoubleSide;
 			}
-			
-			var material = new THREE.MeshFaceMaterial( materials );
-			
-			var mesh = new THREE.Mesh( geometry, material );			
-			mesh.scale.set( 200, 200, 200 );
-			mesh.position.set( 2000, 1000, 0 );
-			scene.add( mesh );
-						
-			//animated.push(cruising);
+			resources['trabant_material'] = new THREE.MeshFaceMaterial( materials );	
+			resources['trabant_geometry'] = geometry;
+			loader.notify('Trabant');				
 		}
 	);
 	
-	var loader = new THREE.JSONLoader();
-	loader.load( "../models/monkey_drop.js",  
-		function ( geometry, materials ) {	
-			
-			for (var m = 0, maxm = materials.length; m < maxm; m++) {
-				materials[m].side = THREE.DoubleSide;
-			}
-			
-			var material = new THREE.MeshFaceMaterial( materials );
-			
-			var mesh = new THREE.Mesh( geometry, material );			
-			mesh.scale.set( 200, 200, 200 );
-			mesh.position.set( -2000, 1000, 0 );
-			scene.add( mesh );
-						
-			//animated.push(cruising);
+	loader.add('City buildings');
+	THREE.ImageUtils.loadTexture( "../images/ground3.jpg" , undefined, 
+		function ( texture ) {
+			resources['city_buildings_cache'] = tingBuildingGenerateCache({});
+			resources['city_ground_material'] = new THREE.MeshBasicMaterial( { map:texture } );	
+			loader.notify('City buildings');
 		}
 	);
+	
+	loader.add('Street texture');
+	THREE.ImageUtils.loadTexture( "../images/street.jpg" , undefined, 
+		function ( texture ) {
+			resources['city_street_texture'] = texture;
+			loader.notify('Street texture');
+		}
+	);
+
+		
+	loader.notify('Scene initialization');
 	
 	/* stats */
 	stats = new Stats();

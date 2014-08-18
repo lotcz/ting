@@ -4,10 +4,10 @@ function tingHUD( params ) {
 	this.height = params.height;
 	this.messageQueue = [];
 	
-	this.element.css( { position:"fixed", backgroundColor:"transparent", fontSize:"32px"} );
+	this.element.css( { position:"fixed", backgroundColor:"transparent", fontSize:"36px"} );
 	
 	this.messages = $( "<div id=\"messages\"></div>" )
-					.css( { position:"fixed", overflow:"hidden" } )
+					.css( { position:"fixed", overflow:"hidden", fontFamily:"messagesFont", lineHeight:"50px" } )
 					.appendTo( this.element );
 						
 	this.OnResize( params );
@@ -33,17 +33,17 @@ tingHUD.prototype.processMessage = function ( params ) {
 	var message = $("<div></div>").append( params.text );
 	if (params.image) {
 		if (params.image.length > 0) {
-			this.loadImage(params.image, 50, 50, message);
-			message.css( { lineHeight:60 + "px" });
+			this.loadImage(params.image, 50, 50, message);			
 		}
 	}
-	message.css( {"color": params.color, border:"2px solid #2a2a40", opacity:0.9, backgroundColor:"#000022", padding:"5px 10px", marginTop:"5px"} ).hide()
+	message.css( {"color": params.color, border:"2px solid #2a2a40", opacity:0, backgroundColor:"#000015", padding:"5px 15px", marginTop:"5px"} ).hide()
 	.prependTo( this.messages )
-	.slideDown( 300, function() {
-		_this.messageProcessed();
-		}
-	).delay(8000).fadeOut( 1000, function () {
-		$(this).remove();
+	.slideDown( 200, function() {
+		$(this).animate( { opacity:0.91 }, 400, function() {
+			_this.messageProcessed();
+		}).delay(5000).fadeOut( 500, function () {
+			$(this).remove();
+		});
 	});
 }
 
@@ -82,6 +82,6 @@ tingHUD.prototype.specialMessage = function ( params ) {
 
 tingHUD.prototype.loadImage = function (path, width, height, target) {
     $('<img src="'+ path +'">').load(function() {
-      $(this).width(width).height(height).css( {padding:"5px", "float":"left", display:"inline-block"} ).prependTo(target);
+      $(this).width(width).height(height).css( {marginTop:"10px", marginRight:"20px", "float":"left", display:"inline-block"} ).prependTo(target);
     });
 }

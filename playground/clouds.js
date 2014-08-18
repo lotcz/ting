@@ -189,7 +189,7 @@ $( function () {
 	
 	geometry = new THREE.Geometry();
 
-	var texture = THREE.ImageUtils.loadTexture( 'cloud10.png' );
+	var texture = THREE.ImageUtils.loadTexture( 'images/cloud10.png' );
 	texture.magFilter = THREE.LinearMipMapLinearFilter;
 	texture.minFilter = THREE.LinearMipMapLinearFilter;
 

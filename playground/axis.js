@@ -20,7 +20,7 @@ function axis( params ) {
 				ball = new THREE.Mesh( geometry, material );
 				ball.position.set( x, 0, 0 );
 				this.wrapper.add(ball);
-				text = makeTextSprite( x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
+				text = makeTextSprite( "X: " + x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
 				text.position.set( x, 150, 0 ); 
 				this.wrapper.add( text );
 			}
@@ -32,7 +32,7 @@ function axis( params ) {
 			ball = new THREE.Mesh( geometry, material );
 			ball.position.set( 0, x, 0 );
 			this.wrapper.add(ball);
-			text = makeTextSprite( x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
+			text = makeTextSprite( "Y: " + x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
 			text.position.set( 150, x, 0 ); 
 			this.wrapper.add( text );
 		}
@@ -44,7 +44,7 @@ function axis( params ) {
 			ball = new THREE.Mesh( geometry, material );
 			ball.position.set( 0, 0, x );
 			this.wrapper.add(ball);
-			text = makeTextSprite( x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
+			text = makeTextSprite( "Z: " + x , { fontsize: 80, fontface:"Arial", fontColor: {r:200, g:200, b:255, a:1},  borderColor: {r:200, g:200, b:255, a:1}, backgroundColor: {r:40, g:40, b:80, a:0.5} } );
 			text.position.set( 0, 150, x ); 
 			this.wrapper.add( text );
 		}

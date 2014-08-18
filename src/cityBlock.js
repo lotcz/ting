@@ -9,10 +9,10 @@ function tingCityBlock( params ) {
 	this.wrapper.position.set ( this.startX, this.startY, this.startZ );
 	if (params.scene) params.scene.add( this.wrapper );
 	
-	var street = new tingStreet( { length:this.sizeA, scale:this.scale, scene:this.wrapper} );
-	street = new tingStreet( { startZ:((this.sizeB-1)*this.scale), length:this.sizeA, scale:this.scale, scene:this.wrapper} );
-	street = new tingStreet( {crossing:true, startX:((this.sizeA-1)*this.scale), startZ:this.scale, length:this.sizeB-2, scale:this.scale, scene:this.wrapper} );
-	street = new tingStreet( {crossing:true, startZ:this.scale, length:this.sizeB-2, scale:this.scale, scene:this.wrapper} );
+	var street = new tingStreet( { length:this.sizeA, scale:this.scale, scene:this.wrapper, texture:params.street_texture} );
+	street = new tingStreet( { startZ:((this.sizeB-1)*this.scale), length:this.sizeA, scale:this.scale, scene:this.wrapper, texture:params.street_texture} );
+	street = new tingStreet( {crossing:true, startX:((this.sizeA-1)*this.scale), startZ:this.scale, length:this.sizeB-2, scale:this.scale, scene:this.wrapper, texture:params.street_texture} );
+	street = new tingStreet( {crossing:true, startZ:this.scale, length:this.sizeB-2, scale:this.scale, scene:this.wrapper, texture:params.street_texture} );
 	
 	var gsizeX = (this.sizeA-2) * this.scale;
 	var gsizeY = (this.sizeB-2) * this.scale;
@@ -49,7 +49,5 @@ function tingCityBlock( params ) {
 	}
 	
 	params.scene.add( this.wrapper );
-	
-	//console.log( this );
 
 }

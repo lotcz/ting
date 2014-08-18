@@ -36,7 +36,9 @@ function tingCity( params ) {
 				block = new tingCityBlock( {
 					scene:this.wrapper,
 					startX: bx,	startZ: bz, sideA: bsa, sideB: bsb,
-					ground_material: params.ground_material, cache:buildings_cache
+					street_texture: params.street_texture,
+					ground_material: params.ground_material, 
+					cache:params.buildings_cache
 				} );
 				
 				/* Cruising targets */

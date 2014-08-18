@@ -1,3 +1,20 @@
+@font-face {
+  font-family: 'messagesFont';
+  src: url('../fonts/spyagency3expand.ttf') format('truetype');
+  font-stretch:expanded;
+}
+
+@font-face {
+  font-family: 'messagesFontBold';
+  src: url('../fonts/spyagency3out.ttf') format('truetype');
+  font-weight: bold;
+}
+
+#messages b {
+	font-family: messagesFontBold;
+	font-size:120%;
+}
+
 body {
 	margin:0;
 	padding:0;
@@ -19,4 +36,66 @@ body {
 #container  canvas {
 	padding:0;
 	background-color:white;
+}
+
+/* 
+	LOADER
+*/	
+
+#ting-loader {
+	margin: 25px auto;	
+	text-align:center;
+	background-color:transparent;
+	font-family: messagesFont;
+	color:#e0e0e0;
+}
+
+#ting-loader .title-image {
+	margin:auto;
+}
+
+#ting-loader .item-table {
+	margin:25px auto;
+	clear:both;
+}
+
+#ting-loader .item-table  .item-name {
+	width: 650px;
+}
+
+#ting-loader .vanish {
+	width:700px;
+	margin:auto;
+}
+
+#ting-loader .item-table  .item-state {
+	width: 50px;
+}
+
+#ting-loader .item-table td {
+	padding:5px;
+	margin: 1px;
+	background-color: #0E0E0E;
+}
+
+#ting-loader .progress-bar-wrapper {
+	border-color:#d6d6d6;
+	border-width:1px;
+	border-style:solid;
+}
+
+#ting-loader .progress-bar {
+	background-color:#d6d6d6;
+	height:25px;
+}
+
+#ting-loader .ok-button {
+	background-color:#0E0E0E;
+	color:#d6d6d6;
+	width: 150px;
+	padding: 25px;
+	margin:10px auto 50px auto;
+	text-align:center;
+	display:none;
+	cursor:pointer;
 }

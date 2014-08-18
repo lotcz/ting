@@ -88,7 +88,7 @@ $( function () {
 	);
 	
 	var tile_geometry = new THREE.PlaneGeometry( 10000, 10000 );
-	var tile_texture = THREE.ImageUtils.loadTexture( "water2.jpg" );
+	var tile_texture = THREE.ImageUtils.loadTexture( "images/water2.jpg" );
 	tile_texture.wrapS = tile_texture.wrapT = THREE.RepeatWrapping;
 	tile_texture.repeat.set( 20, 20 );
 	var tile_material = new THREE.MeshLambertMaterial( { color: 0xffffff, map: tile_texture, side: THREE.DoubleSide } );
@@ -96,7 +96,7 @@ $( function () {
 	tile.position.set( 0, 5000, 5000); 
 	scene.add( tile );
 	
-	var tile_texture = THREE.ImageUtils.loadTexture( "floor-rock1.jpg" );
+	var tile_texture = THREE.ImageUtils.loadTexture( "images/floor-rock1.jpg" );
 	tile_texture.wrapS = tile_texture.wrapT = THREE.RepeatWrapping;
 	tile_texture.repeat.set( 10, 10 );
 	var tile_material = new THREE.MeshLambertMaterial( { color: 0xffffff, map: tile_texture, side: THREE.DoubleSide } );
@@ -104,7 +104,7 @@ $( function () {
 	tile.position.set( 0, 5000, -5000); 
 	scene.add( tile );
 	
-	var cube_texture = THREE.ImageUtils.loadTexture( "floor-rock1.jpg" );
+	var cube_texture = THREE.ImageUtils.loadTexture( "images/Tulips.jpg" );
 	cube_texture.wrapS = cube_texture.wrapT = THREE.RepeatWrapping;
 	cube_texture.repeat.set( 3, 3 );
 	var cube_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: cube_texture, side: THREE.DoubleSide } );

@@ -8,11 +8,11 @@ function tingStreet ( params ) {
 	this.wrapper.position.set ( this.startX, this.startY, this.startZ );
 	if (params.scene) params.scene.add( this.wrapper );	
 	geometry = new THREE.PlaneGeometry( this.length * this.scale, this.scale);
-	var texture = THREE.ImageUtils.loadTexture( "images/street.jpg" );
+	var texture = params.texture;
 	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 	texture.repeat.set( this.length, 1 );
 	texture.anisotropy = MAX_ANISOTROPY;
-	material = new THREE.MeshBasicMaterial( { map:texture, side: THREE.BackSide } );		
+	material = new THREE.MeshBasicMaterial( { map:texture, side: THREE.BackSide } );
 	this.street = new THREE.Mesh( geometry, material );
 	this.street.rotation.x = Math.PI/2;
 

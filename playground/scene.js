@@ -8,10 +8,10 @@ function animationFrame() {
 	stats.begin();	
 	requestAnimationFrame(animationFrame);	
 	DELTA = clock.getDelta();	
-	controls.animationFrame(DELTA);	
+	//controls.animationFrame(DELTA);	
 	
-	for(var i = 0, max = animated.length; i < max; i ++ ) { 
-		animated[i].animationFrame( DELTA );
+	for(var i = 0, max = scene.animated.length; i < max; i ++ ) { 
+		scene.animated[i].animationFrame( DELTA );
 	}			
 		
 	renderer.render( scene.scene, scene.camera );	
@@ -96,7 +96,7 @@ $( function () {
 	controls.resetToDefault();
 	controls.movementSpeed = 500;
 	controls.lookEnabled = controls.movementEnabled = false;
-	animated.push( controls );
+	//animated.push( controls );
 	
 	
 	/* SCENE */
@@ -127,6 +127,19 @@ $( function () {
 			resources['trabant_material'] = new THREE.MeshFaceMaterial( materials );	
 			resources['trabant_geometry'] = geometry;
 			loader.notify('Trabant');				
+		}
+	);
+	
+	loader.add('Driver');
+	var jsonCarLoader = new THREE.JSONLoader();
+	jsonCarLoader.load( "../models/ferrambo.js", 
+		function ( geometry, materials ) {
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+			}
+			resources['driver_material'] = new THREE.MeshFaceMaterial( materials );	
+			resources['driver_geometry'] = geometry;
+			loader.notify('Driver');				
 		}
 	);
 	

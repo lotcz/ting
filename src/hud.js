@@ -3,13 +3,14 @@ function tingHUD( params ) {
 	this.width = params.width;
 	this.height = params.height;
 	this.messageQueue = [];
-	
 	this.element.css( { position:"fixed", backgroundColor:"transparent", fontSize:"36px"} );
+	
+	this.containers = [];
 	
 	this.messages = $( "<div id=\"messages\"></div>" )
 					.css( { position:"fixed", overflow:"hidden", fontFamily:"messagesFont", lineHeight:"50px" } )
 					.appendTo( this.element );
-						
+					
 	this.OnResize( params );
 	
 }
@@ -85,3 +86,25 @@ tingHUD.prototype.loadImage = function (path, width, height, target) {
       $(this).width(width).height(height).css( {marginTop:"10px", marginRight:"20px", "float":"left", display:"inline-block"} ).prependTo(target);
     });
 }
+
+/* CONTAINERS */
+
+tingHUD.prototype.addContainer = function( name, css ) {
+	this.containers[name] = $( "<div id=\"" + name + "\"></div>" )
+					.css( { position:"fixed", overflow:"hidden", fontFamily:"messagesFont",top:"10px", left:"100px", width:"150px", height:"50px",color: "#e0e6e0", border:"2px solid #2a2a40", opacity:0.92, backgroundColor:"#105515", padding:"5px 15px", marginTop:"5px" } )
+					.css( _coalesce( css, {} ))
+					.appendTo( this.element );
+}
+
+tingHUD.prototype.updateContainer = function ( name, content ) {
+	this.containers[name].html( content );
+}
+
+tingHUD.prototype.removeContainer = function ( name ) {
+	this.containers[name].remove();
+}
+
+tingHUD.prototype.getContainer = function ( name ) {
+	return this.containers[name];
+}
+

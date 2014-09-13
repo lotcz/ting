@@ -10,7 +10,7 @@
   font-weight: bold;
 }
 
-#messages b {
+b {
 	font-family: messagesFontBold;
 	font-size:120%;
 }

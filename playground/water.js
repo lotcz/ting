@@ -80,10 +80,10 @@ $( function () {
 		
 	/* PLAY!!! */
 	
-	var water_texture = THREE.ImageUtils.loadTexture( "water2.jpg" );
+	var water_texture = THREE.ImageUtils.loadTexture( "images/water2.jpg" );
 	water_texture.wrapS = water_texture.wrapT = THREE.RepeatWrapping;
 	water_texture.repeat.set( 50, 50 );
-	var floor_texture = THREE.ImageUtils.loadTexture( "floor-rock1.jpg" );
+	var floor_texture = THREE.ImageUtils.loadTexture( "images/floor-rock1.jpg" );
 	floor_texture.wrapS = floor_texture.wrapT = THREE.RepeatWrapping;
 	floor_texture.repeat.set( 5, 5 );
 	var water = new tingWater({ y:-3000, scene:scene, water_texture:water_texture, floor_texture:floor_texture });

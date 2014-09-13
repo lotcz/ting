@@ -11,28 +11,36 @@ function tingScene0( params ) {
 		
 	this.ambientLight = new THREE.AmbientLight(0xf0f0f0);
 	this.scene.add(this.ambientLight);
-	
-	var ax = new axis( { scene:this.scene } );
-	
+		
 	this.initScene = function ( params ) {
-		this.monkey = new THREE.Mesh( params.resources["monkey_geometry"], params.resources["monkey_material"] );			
-		this.monkey.scale.set( 200, 200, 200 );
-		this.monkey.position.set( 0, 1000, 0 );
-		this.scene.add( this.monkey );
+		//this.monkey = new THREE.Mesh( params.resources["monkey_geometry"], params.resources["monkey_material"] );			
+		//this.monkey.scale.set( 200, 200, 200 );
+		//this.monkey.position.set( 0, 1000, 0 );
+		//this.scene.add( this.monkey );
 		
 		this.city1 = new tingCity( {
 							startX:0, startY:0, startZ:0, 
-							blocksA: 15, blocksB:2, 
+							blocksA: 4, blocksB:20, 
 							"ground_material":params.resources['city_ground_material'], 
 							"car_material":params.resources['trabant_material'], 
 							"car_geometry":params.resources['trabant_geometry'],
 							"street_texture":params.resources['city_street_texture'],
 							buildings_cache:params.resources['city_buildings_cache'], 
 							"animated":this.animated, "scene":this.scene } );
+				
+		this.car = new THREE.Mesh( params.resources['driver_geometry'], params.resources['driver_material'] );	
+		this.car.scale.set( 30, 30, 30 );		
+		this.scene.add( this.car );	
+		this.driver = new tingDriver( {mesh:this.car, camera:this.camera, element:document} );
+		this.animated.push( this.driver );
+		hud.addContainer( 'speed', { top: "1px", height:"40px", width:"150px", backgroundColor:"#101020", textAlign:"center" } );
 	}
 	
 	this.resetScene = function () {
-
+		this.car.position.y = 0;
+		this.car.position.x = 0;
+		this.car.position.z = 0;
+		
 	}
 
 }

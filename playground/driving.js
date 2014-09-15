@@ -81,7 +81,8 @@ $( function () {
 	var ax = new axis( { scene:scene } );
 		
 	hud = new tingHUD( {"element":$("#hud"), "width":WIDTH, "height":HEIGHT} );
-	animated.push( hud );
+	hud.addContainer( 'speed', { top: "1px", height:"40px", width:"150px", backgroundColor:"#101020", textAlign:"center" } );
+	//animated.push( hud );
 	
 	/* PLAY!!! */
 	

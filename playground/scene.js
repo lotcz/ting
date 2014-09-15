@@ -142,6 +142,41 @@ $( function () {
 			loader.notify('Driver');				
 		}
 	);
+		
+	loader.add('Sparrow');
+	var jsonCarLoader = new THREE.JSONLoader();
+	jsonCarLoader.load( "../models/Sparrow-body.js", 
+		function ( geometry, materials ) {
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+			}
+			resources['sparrow_body_material'] = new THREE.MeshFaceMaterial( materials );	
+			resources['sparrow_body_geometry'] = geometry;
+			
+			var jsonCarLoader = new THREE.JSONLoader();
+			jsonCarLoader.load( "../models/Sparrow-rotor.js", 
+				function ( geometry, materials ) {
+					for (var m = 0, maxm = materials.length; m < maxm; m++) {
+						materials[m].side = THREE.DoubleSide;
+					}
+					resources['sparrow_rotor_material'] = new THREE.MeshFaceMaterial( materials );	
+					resources['sparrow_rotor_geometry'] = geometry;
+					
+					var jsonCarLoader = new THREE.JSONLoader();
+					jsonCarLoader.load( "../models/Sparrow-rotor2.js", 
+						function ( geometry, materials ) {
+							for (var m = 0, maxm = materials.length; m < maxm; m++) {
+								materials[m].side = THREE.DoubleSide;
+							}
+							resources['sparrow_rotor2_material'] = new THREE.MeshFaceMaterial( materials );	
+							resources['sparrow_rotor2_geometry'] = geometry;
+							loader.notify('Sparrow');				
+						}
+					);							
+				}
+			);		
+		}
+	);
 	
 	loader.add('City buildings');
 	THREE.ImageUtils.loadTexture( "../images/ground3.jpg" , undefined, 
@@ -160,6 +195,23 @@ $( function () {
 		}
 	);
 
+	loader.add('Water');
+	THREE.ImageUtils.loadTexture( "../images/water2.jpg" , undefined, 
+		function ( texture ) {
+			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+			texture.repeat.set( 50, 50 );
+			resources['water_texture'] = texture;
+			
+			THREE.ImageUtils.loadTexture( "../images/floor-rock1.jpg" , undefined, 
+				function ( texture ) {
+					texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					texture.repeat.set( 5, 5 );
+					resources['floor_texture'] = texture;
+					loader.notify('Water');
+				}
+			);
+		}
+	);
 		
 	loader.notify('Scene initialization');
 	

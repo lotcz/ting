@@ -14,10 +14,10 @@ function tingWater ( params ) {
 	this.parts = new Array();
 	this.wrapper = new THREE.Object3D();
 	this.wrapper.position.set( this.x, this.y, this.z);
-	
-	this.sizeX = 10000;
-	this.sizeZ = 10000;
-	this.sizeY = 5000;
+	this.camera = _coalesce( params.camera, camera );
+	this.sizeX = _coalesce(params.sizeX, 10000);
+	this.sizeZ = _coalesce(params.sizeZ, 10000);
+	this.sizeY = _coalesce(params.sizeY, 5000);
 		
 	/* floor */
 	
@@ -84,8 +84,8 @@ function tingWater ( params ) {
 			}
 			this.mesh.geometry.verticesNeedUpdate = true;
 			
-			if (this.box.containsPoint(camera.position)) {
-				this.fog.density = ( 1 - ( 0.8 * Math.abs( camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
+			if (this.box.containsPoint(this.camera.position)) {
+				this.fog.density = ( 1 - ( 0.8 * Math.abs( this.camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
 			} else {
 				this.fog.density = 0;
 			}

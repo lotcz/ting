@@ -9,6 +9,16 @@ function tingDriver( params ) {
 	this.acceleration = 1100;
 	this.actualSpeed = 0;
 	this.speedPortion = 0;
+	
+	this.minAltitude = _coalesce( params.minAltitude, 0 );
+	this.maxAltitude = _coalesce( params.maxAltitude, 0 );
+	this.vertAcceleration = _coalesce( params.vertAcceleration, 500 );
+	this.minVertSpeed = _coalesce( params.minVertSpeed, -1500 );
+	this.maxVertSpeed = _coalesce( params.maxVertSpeed, 1500 );
+	this.actualVertSpeed = 0;
+	
+	this.cameraFixed = _coalesce(params.cameraFixed, true);
+	
 	this.target = new THREE.Vector3();
 	
 	this.animationFrame = function( delta ) {
@@ -38,6 +48,32 @@ function tingDriver( params ) {
 				}				
 			}
 
+			/* vertical */
+			if ( this.moveUp ) {
+				if (this.actualVertSpeed >= 0) {
+					/* accelerating */				
+					this.actualVertSpeed = Math.min( this.actualVertSpeed + ( delta * this.vertAcceleration), this.maxVertSpeed );
+				} else {
+					/* braking in fall */
+					this.actualVertSpeed = Math.min( this.actualVertSpeed + (4 * delta * this.vertAcceleration), 0 );
+				}				
+			} else if ( this.moveDown ) {
+				if (this.actualVertSpeed > 0) {
+					/* braking */
+					this.actualVertSpeed = Math.max( this.actualVertSpeed - (4 * delta * this.vertAcceleration), 0 );
+				} else {
+					/* going down */
+					this.actualVertSpeed = Math.max( this.actualVertSpeed - (delta * this.vertAcceleration), this.minVertSpeed );
+				}
+			} else {
+				/* loosing vertical speed to 0 */
+				if (this.actualVertSpeed > 0) {
+					this.actualVertSpeed = Math.max( this.actualVertSpeed - (0.5 * delta * this.vertAcceleration), 0 );
+				} else {
+					this.actualVertSpeed = Math.min( this.actualVertSpeed + (0.5 * delta * this.vertAcceleration), 0 );
+				}				
+			}
+			
 			if (this.actualSpeed > 0) {
 				this.speedPortion = this.actualSpeed / Math.max(this.maxSpeed, 1);
 			} else {
@@ -49,6 +85,10 @@ function tingDriver( params ) {
 				this.mesh.position.z += delta * this.actualSpeed * Math.cos( this.mesh.rotation.y );
 			}
 			
+			if ( this.actualVertSpeed != 0 ) {
+				this.mesh.position.y += delta * this.actualVertSpeed;
+			}
+						
 			if ( this.moveLeft ) {
 				this.mesh.rotation.y += (3.5 - (2.5 * this.speedPortion)) * delta;
 			}
@@ -57,13 +97,21 @@ function tingDriver( params ) {
 				this.mesh.rotation.y -= (3.5 - (2.5 * this.speedPortion)) * delta;
 			}
 			
-			this.camera.position.x = this.mesh.position.x - ( Math.sin( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
-			this.camera.position.y = this.mesh.position.y + 380 - (300 * this.speedPortion);
-			this.camera.position.z = this.mesh.position.z - ( Math.cos( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
+			if (this.cameraFixed) {
+				this.camera.position.x = this.mesh.position.x - ( Math.sin( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
+				this.camera.position.y = this.mesh.position.y + 380 - (300 * this.speedPortion);
+				this.camera.position.z = this.mesh.position.z - ( Math.cos( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
+			} else {
+				this.camera.position.x = this.mesh.position.x - ( 2000 );
+				this.camera.position.y = this.mesh.position.y + 2000;
+				this.camera.position.z = this.mesh.position.z - ( 2000 );
+			}
+			
 			this.target.set( this.mesh.position.x, this.mesh.position.y + 70 + (10 * this.speedPortion), this.mesh.position.z); 
 			this.camera.lookAt( this.target );
 			
 			hud.updateContainer( 'speed', _round( this.actualSpeed, -2 ) );
+			hud.updateContainer( 'alt', "<b>alt:</b>" + _round( this.mesh.position.y, -2 ) );
 		}
 	}
 	
@@ -72,13 +120,13 @@ function tingDriver( params ) {
 			//event.preventDefault();
 			switch ( event.keyCode ) {
 				
-				case 38: /* UP, FORWARD */
+				case 38: /* FORWARD */
 				case 87: /* W */ 
 					this.moveForward = true;
 					this.moveBackward = false;
 				break;
 				
-				case 40: /* DOWN, BACKWARD */
+				case 40: /* BACKWARD */
 				case 83: /*S*/
 					this.moveBackward = true; 
 					this.moveForward = false;
@@ -89,8 +137,16 @@ function tingDriver( params ) {
 				
 				case 39: /*right*/
 				case 68: /*D*/ this.moveRight = true; break;
-				case 82: /*R*/ this.moveUp = true; break;
-				case 70: /*F*/ this.moveDown = true; break;
+				
+				case 82: /*R*/ 
+					this.moveUp = true; 
+					this.moveDown = false;
+				break;
+				
+				case 70: /*F*/ 
+					this.moveDown = true; 
+					this.moveUp = false; 
+				break;
 			}
 		}
 	};

@@ -38,7 +38,7 @@ function OnKeyPress(e) {
 		
 		switch ( key ) {
 
-			case 108 /* L */: 
+			case 108 /* L */: 				
 				scene.ambientLight.visible = scene.pointLight.visible = !scene.ambientLight.visible; 
 				hud.warning("Light is <b>" + ((scene.ambientLight.visible) ? "On" : "Off") + "</b>.");
 				break;
@@ -143,8 +143,33 @@ $( function () {
 		}
 	);
 		
+	/* Sparrow */
 	loader.add('Sparrow');
-	var jsonCarLoader = new THREE.JSONLoader();
+	/*
+	var models = [	{name:"sparrow_body", path:"../models/Sparrow-body.js"}, 
+					{name:"sparrow_rotor", path:"../models/Sparrow-rotor.js"},
+					{name:"sparrow_rotor2", path:"../models/Sparrow-rotor2.js"}
+				];
+	var loaders = [];
+	
+	for (var i = 0; i < models.length; i++) {
+		(function (i) {
+			loaders[i] = new THREE.JSONLoader( );
+			loaders[i].load( models[i].path, 
+				function ( geometry, materials ) {
+					for (var m = 0, maxm = materials.length; m < maxm; m++) {
+						materials[m].side = THREE.DoubleSide;
+					}
+					resources[models[i].name + '_material'] = new THREE.MeshFaceMaterial( materials );	
+					resources[models[i].name + '_geometry'] = geometry;									
+				}
+			);					
+		}(i));
+		
+	}
+	
+	*/
+	var jsonCarLoader = new THREE.JSONLoader( );
 	jsonCarLoader.load( "../models/Sparrow-body.js", 
 		function ( geometry, materials ) {
 			for (var m = 0, maxm = materials.length; m < maxm; m++) {
@@ -162,7 +187,7 @@ $( function () {
 					resources['sparrow_rotor_material'] = new THREE.MeshFaceMaterial( materials );	
 					resources['sparrow_rotor_geometry'] = geometry;
 					
-					var jsonCarLoader = new THREE.JSONLoader();
+					var jsonCarLoader = new THREE.JSONLoader( );
 					jsonCarLoader.load( "../models/Sparrow-rotor2.js", 
 						function ( geometry, materials ) {
 							for (var m = 0, maxm = materials.length; m < maxm; m++) {
@@ -172,12 +197,14 @@ $( function () {
 							resources['sparrow_rotor2_geometry'] = geometry;
 							loader.notify('Sparrow');				
 						}
-					);							
+					);					
 				}
 			);		
 		}
 	);
 	
+		
+				
 	loader.add('City buildings');
 	THREE.ImageUtils.loadTexture( "../images/ground3.jpg" , undefined, 
 		function ( texture ) {

@@ -1,7 +1,5 @@
 <?php
 
-	const TEXTURE_IMAGES_PATH = "images/textures/";
-
 	$db = mysql_connect('localhost','root','') or die('Cannot connect to DB');
 	mysql_select_db('ting',$db) or die('Cannot select DB');
 

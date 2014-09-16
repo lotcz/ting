@@ -8,7 +8,7 @@ function tingHUD( params ) {
 	this.containers = [];
 	
 	this.messages = $( "<div id=\"messages\"></div>" )
-					.css( { position:"fixed", overflow:"hidden", fontFamily:"messagesFont", lineHeight:"50px" } )
+					.css( { position:"fixed", overflow:"hidden", lineHeight:"50px" } )
 					.appendTo( this.element );
 					
 	this.OnResize( params );
@@ -91,9 +91,10 @@ tingHUD.prototype.loadImage = function (path, width, height, target) {
 
 tingHUD.prototype.addContainer = function( name, css ) {
 	this.containers[name] = $( "<div id=\"" + name + "\"></div>" )
-					.css( { position:"fixed", overflow:"hidden", fontFamily:"messagesFont",top:"10px", left:"100px", width:"150px", height:"50px",color: "#e0e6e0", border:"2px solid #2a2a40", opacity:0.92, backgroundColor:"#105515", padding:"5px 15px", marginTop:"5px" } )
+					.css( { position:"fixed", overflow:"hidden", top:"10px", left:"100px", color: "#e0e6e0", border:"2px solid #2a2a40", opacity:0.92 } )
 					.css( _coalesce( css, {} ))
 					.appendTo( this.element );
+	return this.getContainer(name);
 }
 
 tingHUD.prototype.updateContainer = function ( name, content ) {

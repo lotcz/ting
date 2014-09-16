@@ -1,8 +1,7 @@
 var MAX_ANISOTROPY, DEBUG_MODE = false;
 var WIDTH, HEIGHT, ASPECT, DELTA;
-var renderer, scene, controls, clock, stats, light;
-var animated = [];
-var hud, resources;
+var renderer, scene, controls, clock, stats, resources, animated = [];
+var hud, hud_loading, hud_menu, hud_resources, hud_resource;
 	
 function animationFrame() {	
 	stats.begin();	
@@ -64,10 +63,37 @@ function startLoadingScene (sceneID) {
 		hud.message("C est le message: " + scene_json);
 	})
 	.fail(function( data ) {
-		hud.error("Error: " + data);
+		//hud.error("Error: " + data);
 		var ax = new axis({scene:scene.scene});	
 		animationFrame();
+	}).always( function (data) {
+		hud_menu = new hudMenu( { 	links: [
+									{ title:"Resources", onclick:openResourcesInHUD}
+									
+								], 
+								hud:hud,
+								css:{padding:"2px 10px", width:(hud.width-300)+"px", left:"150px"}
+							} 
+						);		
+		hud.removeContainer("Loading");
 	});
+}
+
+function openResourcesInHUD() {
+	if (hud_resources) {
+		hud_resources.show();
+	} else {
+		hud_resources = new hudResources({});
+	}
+}
+	
+function loadResources( sceneID ) {
+	$.getJSON( '../creator/php/loadResources.php', {scene_id: _coalesce(sceneID, 0) })
+		.done(function( resources_json ) { 
+			resources = new tingResources();
+			resources.loadFromJSON( resources_json );
+			resources.initialize();
+		})
 }
 
 function saveResource( res ) {
@@ -88,64 +114,34 @@ $( function () {
 	document.addEventListener( 'keypress', OnKeyPress, false );
 
 	/* HUD */
+	WIDTH = window.innerWidth;
+	HEIGHT = window.innerHeight - 5;
 	hud = new tingHUD( {"element":$("#hud"), "width":WIDTH, "height":HEIGHT} );
 	
-		
-	
+	var loading_width = 350;
+	var loading_height = 60;
+	hud_loading = hud.addContainer("Loading", {top:Math.round((hud.height-loading_height)/2) + "px", left:Math.round((hud.width-loading_width)/2) + "px", height:loading_height+"px", width:loading_width+"px", textAlign:"center", lineHeight:loading_height+"px"});
+	hud_loading.html("Loading...");
 	
 	/* SCENE */
 	
-	
-	resources = [];
-
 	scene = new tingScene( {} );
+	startLoadingScene (1);
 	
-	startLoadingScene (0);
+	loadResources();
 	
-	var res = new tingModel();
-	res.json.path= "test";
-	saveResource( res );
+	var model = new modelResource();
+	model.json.path = "../models/Sparrow-body.js";
+	//saveResource( model )
 	
 	/* CONTROLS	*/
 	
 	controls = new tingControls({ "camera":scene.camera, element: document });
 	controls.resetToDefault();
 	controls.movementSpeed = 500;
-	controls.lookEnabled = controls.movementEnabled = true;
-	animated.push( controls );
+	controls.lookEnabled = controls.movementEnabled = false;
+	//animated.push( controls );
 	
-	/* Sparrow */
-	/*
-	loader.add('Sparrow0');
-	loader.add('Sparrow1');
-	loader.add('Sparrow2');
-	
-	var models = [	{name:"sparrow_body", path:"../models/Sparrow-body.js"}, 
-					{name:"sparrow_rotor", path:"../models/Sparrow-rotor.js"},
-					{name:"sparrow_rotor2", path:"../models/Sparrow-rotor2.js"},
-					{name:"ferrambo", path:"../models/ferrambo.js"}
-				];
-	var loaders = [];
-	
-	for (var i = 0; i < models.length; i++) {
-		(function (i) {
-			loaders[i] = new THREE.JSONLoader( );
-			loaders[i].load( models[i].path, 
-				function ( geometry, materials ) {
-					for (var m = 0, maxm = materials.length; m < maxm; m++) {
-						materials[m].side = THREE.DoubleSide;
-					}
-					resources[models[i].name + '_material'] = new THREE.MeshFaceMaterial( materials );	
-					resources[models[i].name + '_geometry'] = geometry;									
-					loader.notify('Sparrow' + i.toString());
-				}
-			);					
-		}(i));
-		
-	}
-			
-	
-	*/
 	
 	/* stats */
 	stats = new Stats();

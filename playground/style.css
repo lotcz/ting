@@ -1,18 +1,73 @@
 @font-face {
-  font-family: 'messagesFont';
+  font-family: 'hudFont';
   src: url('../fonts/spyagency3expand.ttf') format('truetype');
   font-stretch:expanded;
 }
 
 @font-face {
-  font-family: 'messagesFontBold';
+  font-family: 'hudFontBold';
   src: url('../fonts/spyagency3out.ttf') format('truetype');
   font-weight: bold;
 }
 
-b {
-	font-family: messagesFontBold;
+#hud {
+	font-family: hudFont;
 	font-size:120%;
+}
+
+#hud b {
+	font-family: hudFontBold;
+	font-size:100%;
+}
+
+#hud div {
+	box-sizing:content-box;
+}
+
+#hud .hud-menu-link {
+	display:inline-block;
+	width:auto;
+	cursor:pointer;	
+	color:#18E710;
+}
+
+#hud .hud-menu-link:hover {
+	color:#E71810;
+}
+
+#hud .list-item {
+	width:100%;
+	display:block;
+}
+
+#hud .form-item {
+	width:100%;
+	display:block;
+	font-size:25px;
+}
+
+#hud .form-item label{
+	width:200px;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+#hud .column {
+	display:inline-block;
+}
+
+#hud .column-id {
+	width:50px;
+	text-align:center;	
+}
+
+#hud .column-type {
+	width:250px;
+	text-align:center;	
+}
+
+#hud .column-desc {
+	text-align:left;	
 }
 
 body {

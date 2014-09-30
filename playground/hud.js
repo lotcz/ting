@@ -97,6 +97,8 @@ $( function () {
 	hud.error("No Error this time you lucky bastard.");
 	hud.message("Press \"<b>T</b>\" or \"<b>G</b>\" for test.");
 	
+	var win = hud.addWindow( "test" );
+	
 	/* AXIS */
 	
 	var ax = new axis( { scene:scene } );

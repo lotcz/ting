@@ -11,9 +11,10 @@ function tingStreet ( params ) {
 	var texture = params.texture;
 	texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 	texture.repeat.set( this.length, 1 );
-	texture.anisotropy = MAX_ANISOTROPY;
-	material = new THREE.MeshBasicMaterial( { map:texture, side: THREE.BackSide } );
+	//texture.anisotropy = MAX_ANISOTROPY;
+	material = new THREE.MeshPhongMaterial( { map:texture, shininess:0, side: THREE.BackSide } );
 	this.street = new THREE.Mesh( geometry, material );
+	this.street.receiveShadow = true;
 	this.street.rotation.x = Math.PI/2;
 
 	if ( params.crossing ) {

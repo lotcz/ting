@@ -114,6 +114,46 @@ $( function () {
 		}
 	);
 	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/octopus_rig.js",  
+		function ( geometry, materials ) {			
+			var material = new THREE.MeshFaceMaterial( materials );
+			var mesh = new THREE.Mesh( geometry, material );			
+			mesh.scale.set( 100, 100, 100 );
+			mesh.position.x = 1500;
+			mesh.position.y = -1100;
+			mesh.position.z = 1000;
+			scene.add( mesh );
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/octopus_swim.js",  
+		function ( geometry, materials ) {	
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+				materials[m].morphTargets = true;
+				//materials[m].morphNormals = true;
+			}
+			var material = new THREE.MeshFaceMaterial( materials );
+			//material.vertexColors = THREE.FaceColors;
+			var eagle = new animatedModel( { "geometry":geometry, "material":material, "duration": 2, "time":0	} );	
+			eagle.mesh.position.set(1500,-1500,-1000);				
+			eagle.mesh.scale.set( 100, 100, 100 );				
+			scene.add(eagle.mesh);
+			animated.push(eagle);
+			/*
+			var cruising_targets = new cruisingTargets();
+			cruising_targets.add(new cruisingTarget(-4000,0,-4000, 600));
+			cruising_targets.chain(new cruisingTarget(4000,0,-4000, 600));
+			cruising_targets.closeCircle();
+			var cruising = new tingCruising({mesh:eagle.mesh,duration:0.1});			
+			cruising.set(cruising_targets.targets[0]);
+			animated.push(cruising);
+			*/
+		}
+	);
+	
 	/* stats */
 	stats = new Stats();
 	stats.setMode(0); // 0: fps, 1: ms

@@ -8,7 +8,7 @@ function tingHUD( params ) {
 	this.containers = [];
 	
 	this.messages = $( "<div id=\"messages\"></div>" )
-					.css( { position:"fixed", overflow:"hidden", lineHeight:"50px" } )
+					.css( { position:"fixed", overflow:"hidden", lineHeight:"50px", zIndex:10000 } )
 					.appendTo( this.element );
 					
 	this.OnResize( params );
@@ -109,3 +109,13 @@ tingHUD.prototype.getContainer = function ( name ) {
 	return this.containers[name];
 }
 
+/* FORMS UI */
+tingHUD.prototype.addWindow = function ( name ) {
+	var winHeader = $("<div>" + name + "</div>").css({height:"35px", backgroundColor:"#150015", textAlign:"center" } );
+	return this.element.append( 		
+		$("<div>Ahoj</div>")
+		.prepend(winHeader)
+		.css( { color: "#e0e6e0", border:"2px solid #2a2a40",backgroundColor:"#000015", opacity:0.92, width:"auto" } )
+		.draggable( {handle:winHeader} ) 
+	);
+}

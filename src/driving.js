@@ -99,7 +99,7 @@ function tingDriver( params ) {
 			
 			if (this.cameraFixed) {
 				this.camera.position.x = this.mesh.position.x - ( Math.sin( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
-				this.camera.position.y = this.mesh.position.y + 380 - (300 * this.speedPortion);
+				this.camera.position.y = this.mesh.position.y + 580 - (300 * this.speedPortion);
 				this.camera.position.z = this.mesh.position.z - ( Math.cos( this.mesh.rotation.y ) * (700 - (550 * this.speedPortion) ) );
 			} else {
 				this.camera.position.x = this.mesh.position.x - ( 2000 );
@@ -107,7 +107,7 @@ function tingDriver( params ) {
 				this.camera.position.z = this.mesh.position.z - ( 2000 );
 			}
 			
-			this.target.set( this.mesh.position.x, this.mesh.position.y + 70 + (10 * this.speedPortion), this.mesh.position.z); 
+			this.target.set( this.mesh.position.x, this.mesh.position.y + 370 + (10 * this.speedPortion), this.mesh.position.z); 
 			this.camera.lookAt( this.target );
 			
 			hud.updateContainer( 'speed', _round( this.actualSpeed, -2 ) );

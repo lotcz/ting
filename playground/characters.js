@@ -49,7 +49,7 @@ $( function () {
 
 	var $container = $('#container');	
 	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor( 0xefd1b5 );
+	renderer.setClearColor( 0x020202 );
 	MAX_ANISOTROPY = renderer.getMaxAnisotropy();
 	$container.append(renderer.domElement);
 	
@@ -136,6 +136,123 @@ $( function () {
 			scene.add( mesh );
 						
 			//animated.push(cruising);
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/ROBOT.js",  
+		function ( geometry, materials ) {	
+			
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+			}
+			
+			var material = new THREE.MeshFaceMaterial( materials );
+			
+			var mesh = new THREE.Mesh( geometry, material );			
+			mesh.scale.set( 600, 600, 600 );
+			mesh.position.set( 0, 0, 2000 );
+			scene.add( mesh );
+						
+			//animated.push(cruising);
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/ROBOT_walk.js",  
+		function ( geometry, materials ) {	
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+				materials[m].morphTargets = true;
+				//materials[m].morphNormals = true;
+			}
+			var material = new THREE.MeshFaceMaterial( materials );
+			//material.vertexColors = THREE.FaceColors;
+			var eagle = new animatedModel( { "geometry":geometry, "material":material, "duration": 2, "time":0	} );	
+			//eagle.mesh.position.set(-2000,0,2000);				
+			eagle.mesh.scale.set( 600, 600, 600 );				
+			scene.add(eagle.mesh);
+			animated.push(eagle);
+			
+			var cruising_targets = new cruisingTargets();
+			cruising_targets.add(new cruisingTarget(-3000,0,5000, 300));
+			cruising_targets.chain(new cruisingTarget(-3000,0,-5000, 300));
+			cruising_targets.closeCircle();
+			var cruising = new tingCruising({mesh:eagle.mesh});			
+			cruising.set(cruising_targets.targets[0]);
+			animated.push(cruising);
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/ROBOT_run.js",  
+		function ( geometry, materials ) {	
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+				materials[m].morphTargets = true;
+				//materials[m].morphNormals = true;
+			}
+			var material = new THREE.MeshFaceMaterial( materials );
+			//material.vertexColors = THREE.FaceColors;
+			var eagle = new animatedModel( { "geometry":geometry, "material":material, "duration": 2, "time":0	} );	
+			//eagle.mesh.position.set(-2000,0,2000);				
+			eagle.mesh.scale.set( 600, 600, 600 );				
+			scene.add(eagle.mesh);
+			animated.push(eagle);
+			
+			var cruising_targets = new cruisingTargets();
+			cruising_targets.add(new cruisingTarget(-4000,0,-4000, 600));
+			cruising_targets.chain(new cruisingTarget(4000,0,-4000, 600));
+			cruising_targets.closeCircle();
+			var cruising = new tingCruising({mesh:eagle.mesh,duration:0.1});			
+			cruising.set(cruising_targets.targets[0]);
+			animated.push(cruising);
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/octopus_rig.js",  
+		function ( geometry, materials ) {	
+			
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+			}
+			
+			var material = new THREE.MeshFaceMaterial( materials );
+			
+			var mesh = new THREE.Mesh( geometry, material );			
+			mesh.scale.set( 600, 600, 600 );
+			mesh.position.set( 3500, 0, 3500 );
+			scene.add( mesh );
+						
+			//animated.push(cruising);
+		}
+	);
+	
+	var loader = new THREE.JSONLoader();
+	loader.load( "../models/oct.js",  
+		function ( geometry, materials ) {	
+			for (var m = 0, maxm = materials.length; m < maxm; m++) {
+				materials[m].side = THREE.DoubleSide;
+				materials[m].morphTargets = true;
+				//materials[m].morphNormals = true;
+			}
+			var material = new THREE.MeshFaceMaterial( materials );
+			//material.vertexColors = THREE.FaceColors;
+			var eagle = new animatedModel( { "geometry":geometry, "material":material, "duration": 2, "time":0	} );	
+			eagle.mesh.position.set(-4000,0,4000);				
+			eagle.mesh.scale.set( 600, 600, 600 );				
+			scene.add(eagle.mesh);
+			animated.push(eagle);
+			/*
+			var cruising_targets = new cruisingTargets();
+			cruising_targets.add(new cruisingTarget(-4000,0,-4000, 600));
+			cruising_targets.chain(new cruisingTarget(4000,0,-4000, 600));
+			cruising_targets.closeCircle();
+			var cruising = new tingCruising({mesh:eagle.mesh,duration:0.1});			
+			cruising.set(cruising_targets.targets[0]);
+			animated.push(cruising);
+			*/
 		}
 	);
 	

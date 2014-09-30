@@ -66,7 +66,7 @@ function tingWater ( params ) {
 	this.mesh.position.y = this.sizeY - (2 * this.amplitude);
 	this.wrapper.add( this.mesh );
 		
-	this.fog = new THREE.FogExp2( 0x0007a0, 0 );
+	this.fog = new THREE.FogExp2( 0x040770, 0 );
 	params.scene.fog = this.fog;
 	
 	this.box = new THREE.Box3();
@@ -85,7 +85,7 @@ function tingWater ( params ) {
 			this.mesh.geometry.verticesNeedUpdate = true;
 			
 			if (this.box.containsPoint(this.camera.position)) {
-				this.fog.density = ( 1 - ( 0.8 * Math.abs( this.camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
+				this.fog.density = ( 1 - ( 0.6 * Math.abs( this.camera.position.y - this.y ) / this.sizeY ) ) * 0.0005;
 			} else {
 				this.fog.density = 0;
 			}

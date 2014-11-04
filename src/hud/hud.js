@@ -113,7 +113,7 @@ tingHUD.prototype.getContainer = function ( name ) {
 tingHUD.prototype.addWindow = function ( name ) {
 	var winHeader = $("<div>" + name + "</div>").css({height:"35px", backgroundColor:"#150015", textAlign:"center" } );
 	return this.element.append( 		
-		$("<div>Ahoj</div>")
+		$("<div></div>")
 		.prepend(winHeader)
 		.css( { color: "#e0e6e0", border:"2px solid #2a2a40",backgroundColor:"#000015", opacity:0.92, width:"auto" } )
 		.draggable( {handle:winHeader} ) 

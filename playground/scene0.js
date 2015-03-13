@@ -14,7 +14,7 @@ function tingScene0( params ) {
 		
 	this.initScene = function ( params ) {
 	
-		this.skybox = new tingSkybox( {"name":"grim",camera:this.camera, size:600000} );
+		this.skybox = new tingSkybox( {"name":"abovesea",camera:this.camera, size:600000} );
 		this.scene.add( this.skybox.wrapper );
 		
 		var water = new tingWater({ x:30000,y:-5000,z:-30000,sizeX:60000,sizeZ:60000,amplitude:300,speed:5, scene:scene, water_texture:resources['water_texture'], floor_texture:resources['floor_texture'], camera:this.camera });

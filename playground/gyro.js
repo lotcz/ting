@@ -144,7 +144,7 @@ $( function () {
 
 	OnWindowResize();
 	setTimeout(play, 100 );
-	setTimeout(play, 10000 );
+	//setTimeout(play, 10000 );
 });
 
 

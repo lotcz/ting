@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>WebSockets and accelerometer</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	</head>
+	
+	<body>
+		<div>Nickname: <input id="nickname" type="text" /></div>
+		<div><button onclick="javascript:Connect();">Connect</button></div>
+		<div id="position"></div>
+		<div id="messages"></div>		
+	</body>
+	
+	<script src="/wegge/js/tools.js" language="javascript"></script>
+		
+	<script type="text/javascript">
+	
+		function msg( str ) {
+			_create(_getById("messages"), "div", str);
+		}
+		
+		function update( json ) {
+			var msg = JSON.parse(json);
+			var el = _getById(msg.nick);
+			if (!el) {
+				_create(
+					_create(_getById("position"), "div", msg.nick),
+					"div", 
+					JSON.stringify(msg.json)
+				).id = msg.nick;
+			} else {
+				el.innerHTML = JSON.stringify(msg.json);
+			}
+		}
+		
+		var ws;
+		
+		function Connect() {
+			
+			if ("WebSocket" in window) {
+				
+				ws = new WebSocket("ws://" + window.location.host + ":8001");
+				ws.onopen = function() {
+					var nick = document.getElementById("nickname").value;
+					ws.send(JSON.stringify({nick:nick}));
+					msg(nick + " is your nickname.");
+				};
+				ws.onmessage = function (evt) { 
+					update(evt.data);
+					//console.log(JSON.parse(evt.data));
+				};
+				ws.onclose = function(evt)	{ 
+					msg("Connection was closed."); 
+					ws = false;
+				};
+				ws.onerror = function()	{ 
+					msg("Connection error."); 
+					//ws = false;
+				};
+
+			} else {
+				// The browser doesn't support WebSocket
+				msg("WebSocket NOT supported by your Browser!");
+			}
+		}
+		
+		window.ondevicemotion = function(event) {  
+			var accelerationX = event.accelerationIncludingGravity.x;  
+			var accelerationY = event.accelerationIncludingGravity.y;  
+			var accelerationZ = event.accelerationIncludingGravity.z;
+			
+			if ( ws ) {
+				ws.send(JSON.stringify(event.accelerationIncludingGravity));
+			}
+		}
+
+		msg("Welcome");
+	</script>
+				
+</html>

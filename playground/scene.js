@@ -73,6 +73,30 @@ function Start() {
 	hud.warning("Hello! This a test of <b>Scene 0</b>.");	
 }
 
+function updatePlayer( data ) {
+	var player, p_json, json;
+    if (data.players.length > 0) {
+		p_json = data.players[data.players.length-1];
+		if ( json.left > 0.5 ) {
+			scene.driver.		
+		}
+		
+	}
+}
+
+function play() {
+	if (ball_id) {
+		var position = ball.position();
+		var json = {
+			top: position.top / MAX_HEIGHT,
+			left: position.left / MAX_WIDTH
+		};
+
+		$.get("/ting/multi/multi.php?json=" + JSON.stringify( json ) + "&id=" + ball_id, updatePlayers );
+	}
+	setTimeout( play, 100 );
+}
+
 /* INIT */	
 $( function () {
 
@@ -239,9 +263,9 @@ $( function () {
 			);
 		}
 	);
-		
+
 	loader.notify('Scene initialization');
-	
+
 	/* stats */
 	stats = new Stats();
 	stats.setMode(0); // 0: fps, 1: ms
@@ -250,11 +274,11 @@ $( function () {
 	stats.domElement.style.left = '0px';
 	stats.domElement.style.top = '0px';
 	document.body.appendChild( stats.domElement );
-		
+	
 	OnWindowResize();
 	clock = new THREE.Clock(true);
 	animationFrame();
-		
+
 });
 
 
